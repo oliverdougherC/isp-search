@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ISP Search launch-market registry",
+  "type": "object",
+  "required": [
+    "registry_version",
+    "status",
+    "route",
+    "bdc_vintage",
+    "last_reviewed",
+    "markets",
+    "unsupported_market_behavior"
+  ],
+  "properties": {
+    "registry_version": { "type": "string" },
+    "status": { "enum": ["proposed_pending_maintainer_confirmation", "active"] },
+    "route": { "const": "C" },
+    "bdc_vintage": {
+      "type": "object",
+      "required": ["data_as_of", "attribution"],
+      "properties": {
+        "data_as_of": { "type": "string", "format": "date" },
+        "download_page_last_updated": { "type": "string", "format": "date" },
+        "attribution": { "type": "string" }
+      }
+    },
+    "last_reviewed": { "type": "string", "format": "date" },
+    "markets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "kind", "geoids", "status", "providers"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "kind": { "enum": ["cbsa", "county_list"] },
+          "geoids": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+          "status": { "enum": ["proposed", "active", "retired"] },
+          "providers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "provider_id",
+                "display_name",
+                "technologies",
+                "evidence",
+                "adapter_tier",
+                "fallback_url",
+                "last_reviewed"
+              ],
+              "properties": {
+                "provider_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,62}$" },
+                "display_name": { "type": "string" },
+                "technologies": {
+                  "type": "array",
+                  "items": { "enum": ["fiber", "cable", "dsl", "fixed_wireless", "satellite"] }
+                },
+                "capacity_based_eligibility": { "type": "boolean" },
+                "evidence": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": ["type"],
+                    "properties": {
+                      "type": { "enum": ["official_footprint", "bdc_area_summary", "unverified"] },
+                      "url": { "type": "string", "format": "uri" },
+                      "checked": { "type": "string", "format": "date" },
+                      "note": { "type": "string" }
+                    }
+                  }
+                },
+                "adapter_tier": {
+                  "enum": [
+                    "official_api",
+                    "documented_public_api",
+                    "reviewed_browser_flow",
+                    "link_only"
+                  ]
+                },
+                "fallback_url": { "type": "string", "format": "uri" },
+                "last_reviewed": { "type": "string", "format": "date" },
+                "listing_blocked_until_evidence": { "type": "boolean" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "unsupported_market_behavior": {
+      "type": "object",
+      "required": ["search_state", "fcc_map_link", "never_pass_address_in_url"],
+      "properties": {
+        "search_state": { "const": "unsupported_market" },
+        "fcc_map_link": { "type": "string", "format": "uri" },
+        "never_pass_address_in_url": { "const": true }
+      }
+    }
+  }
+}
