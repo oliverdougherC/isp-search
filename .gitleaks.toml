@@ -1,0 +1,24 @@
+# Gitleaks configuration. Extends the default ruleset.
+# The allowlist covers ONLY intentional, clearly fake canary values used by privacy tests to
+# prove that secrets and addresses never reach logs, errors, fixtures, or client bundles.
+title = "isp-search"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Intentional test canaries and ignored build output"
+regexes = [
+  '''CANARY[-_][A-Za-z0-9_-]+''',
+  '''test-secret-that-is-at-least-32-characters-long''',
+  '''another-secret-that-is-at-least-32-characters-long''',
+  '''AKIAABCDEFGHIJKLMNOP''',
+  '''eyJhbGciOiJIUzI1NiJ9\.eyJjYW5hcnkiOnRydWV9\.CANARYSIGNATURE''',
+]
+paths = [
+  '''(^|/)\.env$''',
+  '''(^|/)\.next/''',
+  '''(^|/)dist/''',
+  '''(^|/)node_modules/''',
+  '''pnpm-lock\.yaml$''',
+]

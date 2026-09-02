@@ -1,0 +1,42 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "tooling"
+
+# Reproducibility and supply-chain settings (pnpm 11 reads settings from this file, not .npmrc).
+engineStrict: true
+strictPeerDependencies: false
+# Lifecycle scripts are blocked by default (strictDepBuilds). Only packages listed here may run build scripts.
+allowBuilds:
+  esbuild: true
+  unrs-resolver: true
+  sharp: true
+
+# Single source of truth for shared dependency versions.
+catalog:
+  typescript: 5.9.3
+  "@types/node": 24.13.3
+  zod: 4.5.4
+  vitest: 4.1.11
+  eslint: 9.39.5
+  "@eslint/js": 9.39.5
+  typescript-eslint: 8.69.0
+  eslint-plugin-import-x: 4.17.1
+  eslint-config-prettier: 10.1.8
+  "@next/eslint-plugin-next": 16.3.4
+  eslint-plugin-react-hooks: 7.1.1
+  globals: 17.12.0
+  prettier: 3.9.6
+  turbo: 2.10.12
+  next: 16.3.4
+  react: 19.2.8
+  react-dom: 19.2.8
+  "@types/react": 19.2.18
+  "@types/react-dom": 19.2.5
+  drizzle-orm: 0.45.2
+  drizzle-kit: 0.31.10
+  pg: 8.23.0
+  "@types/pg": 8.23.1
+  pg-boss: 12.29.0
+  pino: 10.3.1
+  tsx: 4.23.13

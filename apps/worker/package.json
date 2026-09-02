@@ -1,0 +1,32 @@
+{
+  "name": "@isp-search/worker",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Long-running ISP Search worker: pg-boss job processing, health/readiness HTTP endpoints, graceful shutdown. The only package allowed to depend on Playwright.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -p tsconfig.test.json --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "dev": "tsx watch src/main.ts start",
+    "start": "node dist/main.js start",
+    "health": "node dist/main.js health",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@isp-search/config": "workspace:*",
+    "@isp-search/db": "workspace:*",
+    "@isp-search/domain": "workspace:*",
+    "@isp-search/observability": "workspace:*",
+    "@isp-search/providers": "workspace:*",
+    "playwright": "1.62.1"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

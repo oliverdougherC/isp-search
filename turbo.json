@@ -1,0 +1,46 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "globalDependencies": [
+    ".node-version",
+    "pnpm-workspace.yaml",
+    "tsconfig.base.json",
+    "eslint.config.mjs",
+    "prettier.config.mjs"
+  ],
+  "globalEnv": ["CI", "NODE_ENV"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
+      "env": ["NEXT_PUBLIC_*", "APP_BASE_URL"]
+    },
+    "typecheck": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "lint": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"],
+      "env": ["ISP_SEARCH_TEST_NETWORK"]
+    },
+    "test:integration": {
+      "dependsOn": ["^build", "build"],
+      "cache": false,
+      "env": ["DATABASE_URL", "DATABASE_URL_TEST", "JOB_QUEUE_SCHEMA", "LOG_LEVEL"],
+      "envMode": "loose"
+    },
+    "dev": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true,
+      "envMode": "loose"
+    },
+    "clean": {
+      "cache": false
+    }
+  }
+}

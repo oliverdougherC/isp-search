@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "sourceType": "synthetic",
+    "capturedAt": "2026-09-02T00:00:00.000Z",
+    "adapterVersion": "1.0.0",
+    "parserVersion": "1.0.0",
+    "sanitation": "Hand-written synthetic outcome. No provider response was captured.",
+    "fingerprint": "sha256:ef4f93244dd3de4c5bd6ac37a9d9f159ee3075060778acbdbe7fb631dbf1a50e"
+  },
+  "body": {
+    "outcome": "unavailable",
+    "diagnostics": {
+      "scenario": "unavailable"
+    }
+  }
+}

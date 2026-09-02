@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
+    "types": ["node"]
+  },
+  "include": ["fixture-scan/**/*.ts", "bundle-scan/**/*.ts", "vitest/**/*.ts"],
+  "exclude": ["**/*.test.ts"],
+  "references": [{ "path": "../packages/domain" }, { "path": "../packages/observability" }]
+}

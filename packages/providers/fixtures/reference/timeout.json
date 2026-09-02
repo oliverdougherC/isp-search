@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "sourceType": "synthetic",
+    "capturedAt": "2026-09-02T00:00:00.000Z",
+    "adapterVersion": "1.0.0",
+    "parserVersion": "1.0.0",
+    "sanitation": "Hand-written synthetic outcome. The adapter returns timeout whenever the deadline has elapsed; this body is the outcome when it has not.",
+    "fingerprint": "sha256:ef4f93244dd3de4c5bd6ac37a9d9f159ee3075060778acbdbe7fb631dbf1a50e"
+  },
+  "body": {
+    "outcome": "timeout",
+    "diagnostics": {
+      "scenario": "timeout"
+    }
+  }
+}

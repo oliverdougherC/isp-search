@@ -1,0 +1,76 @@
+# dependencies and build output
+node_modules/
+dist/
+.next/
+out/
+.turbo/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# environment files: only the example is committed
+.env
+.env.*
+!.env.example
+
+# logs and OS noise
+*.log
+npm-debug.log*
+pnpm-debug.log*
+.DS_Store
+Thumbs.db
+
+# editor
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# provider and browser artifacts must never be committed
+*.har
+*.har.gz
+*.har.zip
+har/
+capture/
+captures/
+raw/
+raw-responses/
+provider-responses/
+browser-profiles/
+.playwright/
+playwright-report/
+playwright/.cache/
+test-results/
+screenshots/
+recordings/
+videos/
+*.webm
+*.trace
+*.trace.zip
+cookies*.json
+cookies*.txt
+session*.json
+storageState*.json
+storage-state*.json
+
+# database dumps and backups
+*.dump
+*.pgdump
+*.sql.gz
+*.backup
+pgdata/
+postgres-data/
+
+# secrets and keys
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+.secrets/
+
+# scratch
+tmp/
+.tmp/
+
+# boundary-test probe files (created and deleted by tooling/boundaries tests)
+*.boundary-probe.*

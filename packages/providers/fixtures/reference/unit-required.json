@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "sourceType": "synthetic",
+    "capturedAt": "2026-09-02T00:00:00.000Z",
+    "adapterVersion": "1.0.0",
+    "parserVersion": "1.0.0",
+    "sanitation": "Hand-written synthetic outcome with synthetic unit labels.",
+    "fingerprint": "sha256:7228402a6d2cac5c931b705d19ebb488f541bad7ff587641958a8dbbee698144"
+  },
+  "body": {
+    "outcome": "unit_required",
+    "actionOptions": ["Unit 1A", "Unit 1B", "Unit 2A"],
+    "diagnostics": {
+      "scenario": "unit-required"
+    }
+  }
+}

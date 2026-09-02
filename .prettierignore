@@ -1,0 +1,11 @@
+node_modules
+dist
+.next
+.turbo
+coverage
+pnpm-lock.yaml
+packages/db/drizzle/meta
+packages/db/drizzle/*.sql
+CHANGELOG.md
+LICENSE
+packages/providers/fixtures/reference/malformed.json

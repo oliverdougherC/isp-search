@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "sourceType": "synthetic",
+    "capturedAt": "2026-09-02T00:00:00.000Z",
+    "adapterVersion": "1.0.0",
+    "parserVersion": "1.0.0",
+    "sanitation": "Hand-written synthetic outcome with synthetic candidate labels.",
+    "fingerprint": "sha256:891f71295d7a2f409dfc6567964ec07f5329578a138d5e196ff03a4129cf3807"
+  },
+  "body": {
+    "outcome": "address_ambiguous",
+    "actionOptions": ["7 Synthetic Way", "7 Synthetic Court"],
+    "diagnostics": {
+      "scenario": "address-ambiguous"
+    }
+  }
+}

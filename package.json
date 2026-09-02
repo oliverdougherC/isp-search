@@ -1,0 +1,65 @@
+{
+  "name": "isp-search",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Address-level US internet provider discovery and price comparison with explicit provenance and privacy-safe search. Public beta foundation.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oliverdougherC/isp-search.git"
+  },
+  "type": "module",
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=24.20.0 <25",
+    "pnpm": ">=11.25.0 <12"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "24.20.0",
+      "onFail": "download"
+    }
+  },
+  "scripts": {
+    "dev": "node scripts/with-env.mjs pnpm turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint -- --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:integration": "node scripts/with-env.mjs pnpm turbo run test:integration",
+    "db:up": "docker compose up -d --wait postgres",
+    "db:down": "docker compose down",
+    "db:reset": "docker compose down -v && docker compose up -d --wait postgres && pnpm db:migrate",
+    "db:generate": "node scripts/with-env.mjs pnpm --filter @isp-search/db db:generate",
+    "db:migrate": "node scripts/with-env.mjs pnpm --filter @isp-search/db db:migrate",
+    "db:check": "node scripts/with-env.mjs pnpm --filter @isp-search/db db:check",
+    "db:seed": "node scripts/with-env.mjs pnpm --filter @isp-search/db db:seed",
+    "clean": "turbo run clean && rm -rf .turbo node_modules/.cache",
+    "env:init": "node scripts/init-env.mjs",
+    "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
+    "db:status": "node scripts/with-env.mjs pnpm --filter @isp-search/db db:status",
+    "worker:health": "node scripts/with-env.mjs pnpm --filter @isp-search/worker health",
+    "scan:fixtures": "pnpm --filter @isp-search/tooling build && node tooling/dist/fixture-scan/cli.js .",
+    "scan:secrets": "secretlint \"**/*\"",
+    "scan:bundle": "pnpm --filter @isp-search/tooling build && node tooling/dist/bundle-scan/cli.js apps/web/.next"
+  },
+  "devDependencies": {
+    "@eslint/js": "catalog:",
+    "@secretlint/secretlint-rule-preset-recommend": "13.0.5",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-import-x": "catalog:",
+    "globals": "catalog:",
+    "prettier": "catalog:",
+    "secretlint": "13.0.5",
+    "turbo": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:",
+    "vitest": "catalog:"
+  }
+}

@@ -1,0 +1,24 @@
+# Local development infrastructure. Application processes run on the host (pnpm dev).
+# Reset everything, including data: docker compose down -v
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: isp-search-postgres
+    environment:
+      POSTGRES_USER: isp_search
+      # Local-only development credential. Production uses managed secrets (never this value).
+      POSTGRES_PASSWORD: isp_search_dev
+      POSTGRES_DB: isp_search
+    ports:
+      - "${POSTGRES_PORT:-55432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U isp_search -d isp_search"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    command: ["postgres", "-c", "log_min_duration_statement=250ms"]
+
+volumes:
+  postgres-data:

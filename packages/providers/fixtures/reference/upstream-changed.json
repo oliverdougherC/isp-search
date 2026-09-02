@@ -1,0 +1,14 @@
+{
+  "metadata": {
+    "sourceType": "synthetic",
+    "capturedAt": "2026-09-02T00:00:00.000Z",
+    "adapterVersion": "1.0.0",
+    "parserVersion": "1.0.0",
+    "sanitation": "Hand-written. The fingerprint is deliberately stale so the adapter reports upstream_changed.",
+    "fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "body": {
+    "outcome": "available",
+    "diagnostics": { "scenario": "upstream-changed" }
+  }
+}

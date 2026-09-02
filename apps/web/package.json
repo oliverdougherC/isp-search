@@ -1,0 +1,36 @@
+{
+  "name": "@isp-search/web",
+  "version": "0.0.0",
+  "private": true,
+  "description": "ISP Search public web application and search API surface (Next.js App Router).",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "clean": "rm -rf .next *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@isp-search/config": "workspace:*",
+    "@isp-search/db": "workspace:*",
+    "@isp-search/domain": "workspace:*",
+    "@isp-search/observability": "workspace:*",
+    "@isp-search/ui": "workspace:*",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@next/eslint-plugin-next": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "eslint-plugin-react-hooks": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

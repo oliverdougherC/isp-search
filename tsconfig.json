@@ -1,0 +1,14 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/domain" },
+    { "path": "packages/config" },
+    { "path": "packages/observability" },
+    { "path": "packages/db" },
+    { "path": "packages/providers" },
+    { "path": "packages/ui" },
+    { "path": "apps/worker" },
+    { "path": "apps/web" },
+    { "path": "tooling" }
+  ]
+}

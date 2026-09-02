@@ -1,0 +1,75 @@
+import { z } from 'zod';
+
+/**
+ * Environment schemas, split by runtime so that each process validates exactly what it needs
+ * and nothing more. Values are described in `.env.example`.
+ *
+ * Naming rule: anything readable by the browser MUST be prefixed `NEXT_PUBLIC_`; anything
+ * else is server-only. Secrets never carry the public prefix.
+ */
+
+const booleanFromString = z
+  .enum(['true', 'false', '1', '0'])
+  .transform((value) => value === 'true' || value === '1');
+
+const port = z.coerce.number().int().min(1).max(65535);
+
+const logLevel = z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']);
+
+export const NodeEnv = z.enum(['development', 'test', 'production']);
+export type NodeEnv = z.infer<typeof NodeEnv>;
+
+/** Values that are safe to embed in client bundles. */
+export const PublicEnvSchema = z.object({
+  NEXT_PUBLIC_APP_ENV: z.enum(['development', 'staging', 'production']).default('development'),
+  NEXT_PUBLIC_APP_NAME: z.string().min(1).max(60).default('ISP Search'),
+});
+export type PublicEnv = z.infer<typeof PublicEnvSchema>;
+
+/** Shared server-side values required by every long-running process. */
+const SharedServerSchema = z.object({
+  NODE_ENV: NodeEnv.default('development'),
+  LOG_LEVEL: logLevel.default('info'),
+  DATABASE_URL: z
+    .url()
+    .refine((value) => value.startsWith('postgres://') || value.startsWith('postgresql://'), {
+      message: 'DATABASE_URL must be a postgres:// or postgresql:// URL',
+    }),
+  /**
+   * Key material for the versioned HMAC address identity (ADR-007). At least 32 characters.
+   * Generate with `openssl rand -hex 32` or `pnpm env:init`.
+   */
+  ADDRESS_HMAC_SECRET: z.string().min(32, 'ADDRESS_HMAC_SECRET must be at least 32 characters'),
+  ADDRESS_HMAC_KEY_VERSION: z.coerce.number().int().min(1).default(1),
+  /** Debug payload capture is off by default and can never exceed a 24 hour TTL. */
+  DEBUG_CAPTURE_ENABLED: booleanFromString.default(false),
+  DEBUG_CAPTURE_TTL_HOURS: z.coerce.number().int().min(1).max(24).default(1),
+});
+
+export const WebServerEnvSchema = SharedServerSchema.extend({
+  PORT: port.default(3000),
+  APP_BASE_URL: z.url().default('http://localhost:3000'),
+});
+export type WebServerEnv = z.infer<typeof WebServerEnvSchema>;
+
+export const WorkerEnvSchema = SharedServerSchema.extend({
+  WORKER_HEALTH_PORT: port.default(3100),
+  WORKER_CONCURRENCY: z.coerce.number().int().min(1).max(64).default(4),
+  JOB_QUEUE_SCHEMA: z
+    .string()
+    .regex(/^[a-z_][a-z0-9_]{0,62}$/, 'JOB_QUEUE_SCHEMA must be a lowercase postgres identifier')
+    .default('pgboss'),
+  SHUTDOWN_GRACE_MS: z.coerce.number().int().min(0).max(120_000).default(15_000),
+});
+export type WorkerEnv = z.infer<typeof WorkerEnvSchema>;
+
+export const TestEnvSchema = z.object({
+  DATABASE_URL_TEST: SharedServerSchema.shape.DATABASE_URL.optional(),
+  JOB_QUEUE_SCHEMA: WorkerEnvSchema.shape.JOB_QUEUE_SCHEMA,
+  /** Deterministic suites run with network disabled unless this is explicitly `true`. */
+  ISP_SEARCH_TEST_NETWORK: booleanFromString.default(false),
+});
+export type TestEnv = z.infer<typeof TestEnvSchema>;
+
+/** Names of every variable that must never appear in client bundles or logs in plaintext. */
+export const SECRET_ENV_NAMES: readonly string[] = ['DATABASE_URL', 'ADDRESS_HMAC_SECRET'];

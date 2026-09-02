@@ -1,0 +1,39 @@
+{
+  "name": "@isp-search/domain",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Pure domain vocabulary for ISP Search: schemas, states, and invariants. No I/O, no framework imports.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./address-identity": {
+      "types": "./dist/address-identity.d.ts",
+      "browser": "./dist/browser-forbidden.js",
+      "default": "./dist/address-identity.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -p tsconfig.test.json --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "dependencies": {
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

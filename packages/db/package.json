@@ -1,0 +1,60 @@
+{
+  "name": "@isp-search/db",
+  "version": "0.0.0",
+  "private": true,
+  "description": "PostgreSQL access for ISP Search: Drizzle schema, explicit migrations, health/readiness checks, seed data, and the pg-boss job queue wrapper. Server-only.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "browser": "./dist/browser-forbidden.js",
+      "default": "./dist/index.js"
+    },
+    "./schema": {
+      "types": "./dist/schema/index.d.ts",
+      "browser": "./dist/browser-forbidden.js",
+      "default": "./dist/schema/index.js"
+    },
+    "./queue": {
+      "types": "./dist/queue/index.d.ts",
+      "browser": "./dist/browser-forbidden.js",
+      "default": "./dist/queue/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "drizzle"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -p tsconfig.test.json --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:check": "drizzle-kit check",
+    "db:seed": "node dist/cli.js seed",
+    "db:status": "node dist/cli.js status",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@isp-search/config": "workspace:*",
+    "@isp-search/domain": "workspace:*",
+    "@isp-search/observability": "workspace:*",
+    "drizzle-orm": "catalog:",
+    "pg": "catalog:",
+    "pg-boss": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/pg": "catalog:",
+    "drizzle-kit": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}
