@@ -42,7 +42,7 @@
     "env:init": "node scripts/init-env.mjs",
     "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "db:status": "node scripts/with-env.mjs pnpm --filter @isp-search/db db:status",
-    "worker:health": "node scripts/with-env.mjs pnpm --filter @isp-search/worker health",
+    "worker:health": "pnpm --filter @isp-search/worker... build && node scripts/with-env.mjs pnpm --filter @isp-search/worker health",
     "scan:fixtures": "pnpm --filter @isp-search/tooling build && node tooling/dist/fixture-scan/cli.js .",
     "scan:secrets": "secretlint \"**/*\"",
     "scan:bundle": "pnpm --filter @isp-search/tooling build && node tooling/dist/bundle-scan/cli.js apps/web/.next"
