@@ -37,8 +37,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:check": "drizzle-kit check",
-    "db:seed": "node dist/cli.js seed",
-    "db:status": "node dist/cli.js status",
+    "db:seed": "pnpm build && node dist/cli.js seed",
+    "db:status": "pnpm build && node dist/cli.js status",
     "clean": "rm -rf dist *.tsbuildinfo"
   },
   "dependencies": {
