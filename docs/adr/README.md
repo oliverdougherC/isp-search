@@ -16,3 +16,6 @@ evidence with official sources, consequences, owner, review trigger, and unresol
 | ADR-008                                                      | Deployment topology                                                   | not started                        | PLA-395          |
 
 The M0 gate result is in [`docs/sources/m0-go-no-go.md`](../sources/m0-go-no-go.md).
+
+The Round 1 (M0 + M1) handoff with fresh-clone evidence is in
+[`docs/handoffs/round-1-m1-handoff.md`](../handoffs/round-1-m1-handoff.md).
