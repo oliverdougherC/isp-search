@@ -39,13 +39,14 @@ launch markets, no live provider adapter approved yet, resolver selected, consen
 ```bash
 git clone https://github.com/oliverdougherC/isp-search.git
 cd isp-search
-pnpm install
-pnpm env:init            # writes .env from .env.example with a generated HMAC secret
-pnpm db:up               # starts PostgreSQL 18 in Docker and waits for it to be healthy
-pnpm db:migrate          # applies the committed SQL migrations (never implicit)
-pnpm db:seed             # inserts the synthetic reference providers
-pnpm build               # builds every package (tsc project references + next build)
-pnpm dev                 # web on http://localhost:3000, worker health on http://localhost:3100
+pnpm install            # also downloads the pinned Node 24.20.0 into the workspace
+pnpm env:init           # writes .env from .env.example with a generated HMAC secret
+pnpm db:up              # starts PostgreSQL 18 in Docker (host port 55432) and waits for it
+pnpm db:migrate         # applies the committed SQL migrations (never implicit)
+pnpm build              # builds every package (tsc project references + next build)
+pnpm db:seed            # inserts the synthetic reference providers
+pnpm db:status          # readiness: connectivity + migrations applied
+pnpm dev                # web on http://localhost:3000, worker health on http://localhost:3100
 ```
 
 Health and readiness:

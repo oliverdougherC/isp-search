@@ -14,8 +14,8 @@ pnpm install
 pnpm env:init     # .env with a generated ADDRESS_HMAC_SECRET (mode 600); never commit it
 pnpm db:up        # PostgreSQL 18 on localhost:55432 (host port chosen to avoid a local Postgres)
 pnpm db:migrate   # apply committed SQL migrations
-pnpm db:seed      # synthetic reference providers
 pnpm build
+pnpm db:seed      # synthetic reference providers (builds packages/db first if needed)
 pnpm dev          # web http://localhost:3000, worker health http://localhost:3100
 ```
 
