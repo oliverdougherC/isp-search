@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security or privacy report
+    url: https://github.com/oliverdougherC/isp-search/security/advisories/new
+    about: Please report vulnerabilities and privacy issues privately, never in a public issue.
+  - name: Project planning (Linear)
+    url: https://linear.app/platinum-labs/project/isp-search-f03fc61c15a2
+    about: Milestones, issues, and planning documents live in Linear.

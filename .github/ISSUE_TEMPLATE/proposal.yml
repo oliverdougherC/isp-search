@@ -1,0 +1,31 @@
+name: Proposal
+description: Propose a change to behaviour, data sources, or architecture.
+labels: ["proposal"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and official sources
+      description: Link current primary sources (FCC, provider terms, vendor docs) with the date you checked them.
+  - type: textarea
+    id: integration
+    attributes:
+      label: External integration and terms impact
+      description: Does this touch a provider flow, FCC data, or a vendor? Which ADR would change?
+  - type: input
+    id: linear
+    attributes:
+      label: Related Linear issue
+      placeholder: PLA-___

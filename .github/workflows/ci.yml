@@ -1,0 +1,120 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Least privilege by default; jobs that need more request it explicitly.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TURBO_TELEMETRY_DISABLED: "1"
+  NEXT_TELEMETRY_DISABLED: "1"
+  DO_NOT_TRACK: "1"
+
+jobs:
+  checks:
+    name: format, lint, typecheck, unit tests, build, scans
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - name: Production build with canary secrets
+        # Server-only values are set to recognizable canaries so the bundle scan can prove
+        # they never reach client output. They are not real secrets.
+        env:
+          ADDRESS_HMAC_SECRET: CANARY-CI-SECRET-0f9e8d7c6b5a49382716aabbccdd
+          DATABASE_URL: postgresql://canary_user:CANARY-CI-DB-PASSWORD@localhost:55432/canary_db
+        run: pnpm build
+      - name: Client bundle canary scan
+        run: node tooling/dist/bundle-scan/cli.js apps/web/.next CANARY-CI-SECRET CANARY-CI-DB-PASSWORD canary_user
+      - name: Fixture PII and secret scan
+        run: node tooling/dist/fixture-scan/cli.js .
+      - name: Secretlint
+        run: pnpm scan:secrets
+
+  database:
+    name: migrations and integration tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_USER: isp_search
+          POSTGRES_PASSWORD: isp_search_ci
+          POSTGRES_DB: isp_search
+        ports: ["55432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U isp_search -d isp_search"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    env:
+      # CI-only credential for the ephemeral service container above.
+      DATABASE_URL: postgresql://isp_search:isp_search_ci@localhost:55432/isp_search
+      DATABASE_URL_TEST: postgresql://isp_search:isp_search_ci@localhost:55432/isp_search
+      ADDRESS_HMAC_SECRET: ci-only-hmac-secret-not-a-real-secret-0123456789
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Migration verification (generate must be a no-op, check must pass)
+        run: |
+          pnpm db:generate
+          git diff --exit-code -- packages/db/drizzle
+          pnpm db:check
+      - name: Apply migrations to the empty CI database
+        run: pnpm db:migrate
+      - run: pnpm db:seed
+      - run: pnpm db:status
+      - run: pnpm test:integration
+      - name: Worker health command against the migrated database
+        run: pnpm --filter @isp-search/worker... build && pnpm worker:health
+
+  gitleaks:
+    name: secret scanning (gitleaks, full history)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: .gitleaks.toml
+          GITLEAKS_ENABLE_SUMMARY: "true"
+
+  dependency-review:
+    name: dependency review
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/dependency-review-action@v5
+        with:
+          fail-on-severity: moderate
+          comment-summary-in-pr: on-failure
