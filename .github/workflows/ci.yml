@@ -40,6 +40,7 @@ jobs:
         # they never reach client output. They are not real secrets.
         env:
           ADDRESS_HMAC_SECRET: CANARY-CI-SECRET-0f9e8d7c6b5a49382716aabbccdd
+          # secretlint-disable-next-line -- canary, not a credential
           DATABASE_URL: postgresql://canary_user:CANARY-CI-DB-PASSWORD@localhost:55432/canary_db
         run: pnpm build
       - name: Client bundle canary scan
@@ -65,8 +66,10 @@ jobs:
           --health-cmd "pg_isready -U isp_search -d isp_search"
           --health-interval 5s --health-timeout 3s --health-retries 10
     env:
-      # CI-only credential for the ephemeral service container above.
+      # CI-only credential for the ephemeral service container above (not a real secret).
+      # secretlint-disable-next-line
       DATABASE_URL: postgresql://isp_search:isp_search_ci@localhost:55432/isp_search
+      # secretlint-disable-next-line
       DATABASE_URL_TEST: postgresql://isp_search:isp_search_ci@localhost:55432/isp_search
       ADDRESS_HMAC_SECRET: ci-only-hmac-secret-not-a-real-secret-0123456789
     steps:
