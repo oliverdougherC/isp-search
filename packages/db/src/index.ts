@@ -78,4 +78,5 @@ export {
   type SettleDecision,
   type StartQualificationResult,
 } from './orchestration.js';
+export { buildSearchResource, type SearchReadResult } from './read-model.js';
 export * as schema from './schema/index.js';

@@ -140,12 +140,21 @@ importers:
       '@isp-search/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@isp-search/discovery':
+        specifier: workspace:*
+        version: link:../../packages/discovery
       '@isp-search/domain':
         specifier: workspace:*
         version: link:../../packages/domain
       '@isp-search/observability':
         specifier: workspace:*
         version: link:../../packages/observability
+      '@isp-search/providers':
+        specifier: workspace:*
+        version: link:../../packages/providers
+      '@isp-search/resolver':
+        specifier: workspace:*
+        version: link:../../packages/resolver
       '@isp-search/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -165,6 +174,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 24.13.3
+      '@types/pg':
+        specifier: 'catalog:'
+        version: 8.23.1
       '@types/react':
         specifier: 'catalog:'
         version: 19.2.18
@@ -174,6 +186,9 @@ importers:
       eslint-plugin-react-hooks:
         specifier: 'catalog:'
         version: 7.1.1(eslint@9.39.5(supports-color@10.2.2))(supports-color@10.2.2)
+      pg:
+        specifier: 'catalog:'
+        version: 8.23.0
       typescript:
         specifier: 'catalog:'
         version: 5.9.3

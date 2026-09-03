@@ -90,3 +90,13 @@ export {
 } from './truth.js';
 export { ProviderId, ProviderRef, OfficialLinkKind, isApprovedOfficialUrl } from './provider.js';
 export { PublicErrorCode, PublicApiError, publicApiError } from './errors.js';
+export {
+  API_VERSION,
+  SearchSubmission,
+  SearchActionSubmission,
+  SearchResource,
+  SearchCreated,
+  ProviderResult,
+  EvidenceSummary,
+  completenessStatement,
+} from './api.js';
