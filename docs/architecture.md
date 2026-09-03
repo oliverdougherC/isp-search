@@ -32,7 +32,9 @@ browser ──HTTP──▶ apps/web (Next.js 16, App Router)
 | `@isp-search/domain`        | pure vocabulary: availability states, adapter outcomes, search states, structured address, synthetic conventions, HMAC identity (server-only subpath) | `zod`, `node:crypto` only                                                                                        |
 | `@isp-search/config`        | typed environment schemas (`.` public, `./server` server-only)                                                                                        | `zod`                                                                                                            |
 | `@isp-search/observability` | PII-safe logger, redaction, correlation IDs, safe errors                                                                                              | `pino`                                                                                                           |
-| `@isp-search/db`            | Drizzle schema, migrations, health/readiness, seed, pg-boss wrapper (server-only)                                                                     | domain, config, observability, `pg`, `drizzle-orm`, `pg-boss`                                                    |
+| `@isp-search/db`            | Drizzle schema, migrations, sessions/retention, orchestration, read model, caches, registry import, pg-boss wrapper (server-only)                     | domain, config, discovery, observability, `pg`, `drizzle-orm`, `pg-boss`                                         |
+| `@isp-search/discovery`     | `CandidateDiscovery` interface + Route C registry implementation and bundled registries (pure)                                                        | domain, `zod`                                                                                                    |
+| `@isp-search/resolver`      | `AddressResolver` contract, deterministic synthetic resolver, gated Smarty skeleton (pure)                                                            | domain, `zod`                                                                                                    |
 | `@isp-search/providers`     | adapter contract, registry, reference adapters, synthetic fixtures                                                                                    | domain, `zod` (never db)                                                                                         |
 | `@isp-search/ui`            | accessible React components                                                                                                                           | domain, `react`                                                                                                  |
 | `@isp-search/web`           | Next.js UI and API                                                                                                                                    | config, db, domain, discovery, providers (registry/version metadata), resolver, observability, ui (never worker) |
@@ -78,5 +80,7 @@ code, and placing them in `config` would conflate configuration with output.
 
 ## What is not built yet
 
-Search API and orchestration (M2), real provider adapters and label parsing (M3), product UX (M4),
-deployment topology and ADR-008 (M5). The home page says so.
+Real provider adapters, Broadband Facts label parsing, and offer normalization against live data
+(M3); the full product UX, methodology pages, and accessibility hardening (M4); deployment
+topology and ADR-008 (M5). The M2 search core is complete and deterministic: every provider is a
+synthetic reference adapter and the active registry is the development-only synthetic market.
