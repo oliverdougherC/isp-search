@@ -11,7 +11,7 @@ import {
 import { createJobQueue, QUEUES, type QualificationJobData } from '@isp-search/db/queue';
 import { createRegistryCandidateDiscovery } from '@isp-search/discovery';
 import { createLogger, toLoggableError } from '@isp-search/observability';
-import { createAdapterRegistry, referenceAdapterSet } from '@isp-search/providers';
+import { createAdapterRegistry, referenceAdapterSetForEnvironment } from '@isp-search/providers';
 
 import { createHealthServer } from './http/health-server.js';
 import { createQualificationProcessor } from './orchestration/processor.js';
@@ -62,7 +62,13 @@ async function main(argv: readonly string[]): Promise<number> {
 
   // M2 orchestration (PLA-367): deterministic reference adapters behind the gated registry,
   // registry-based candidate discovery, per-provider concurrency, typed settle decisions.
-  const adapters = referenceAdapterSet();
+  const adapters = referenceAdapterSetForEnvironment({
+    nodeEnv: env.NODE_ENV,
+    allowReferenceAdapters: env.ALLOW_REFERENCE_ADAPTERS,
+  });
+  if (adapters.length === 0) {
+    logger.warn('no adapters enabled for this environment; providers are link-only');
+  }
   const enabledProviderIds =
     env.ENABLED_PROVIDER_IDS.trim() === '*'
       ? new Set(adapters.map((adapter) => adapter.providerId))

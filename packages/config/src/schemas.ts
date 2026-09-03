@@ -71,6 +71,11 @@ const SharedServerSchema = z.object({
    * Removing an id downgrades that provider to link-only (provider-disable runbook).
    */
   ENABLED_PROVIDER_IDS: z.string().default('*'),
+  /**
+   * Reference adapters are synthetic-only. In production they are disabled unless this is
+   * set deliberately (controlled demo environments only); it has no effect elsewhere.
+   */
+  ALLOW_REFERENCE_ADAPTERS: booleanFromString.default(false),
   SMARTY_ENABLED: booleanFromString.default(false),
   SMARTY_AUTH_ID: z.string().min(1).optional(),
   SMARTY_AUTH_TOKEN: z.string().min(1).optional(),

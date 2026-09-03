@@ -5,13 +5,91 @@
     "adapterVersion": "1.0.0",
     "parserVersion": "1.0.0",
     "sanitation": "Hand-written synthetic outcome. Finishes after a delay so progressive results are observable.",
-    "fingerprint": "sha256:fbdc0185fb73133007c58488dda7ef39e7790118353d774c0d4bc38d8b0a5591"
+    "fingerprint": "sha256:f6c75724362463f6bbb41892acf9417aea65223cb6ccbb1ff03a38ed558a7fb7"
   },
   "body": {
     "outcome": "available",
     "diagnostics": {
       "scenario": "slow",
       "delay_ms": 3000
-    }
+    },
+    "offers": [
+      {
+        "kind": "address_offer",
+        "schemaVersion": 1,
+        "providerId": "reference-slow",
+        "offerKey": "fiber-2gig",
+        "planKey": "fiber-2gig",
+        "name": "Fiber 2 Gig",
+        "technology": "fiber",
+        "download": {
+          "kind": "known",
+          "mbps": 2000,
+          "basis": "advertised"
+        },
+        "upload": {
+          "kind": "known",
+          "mbps": 2000,
+          "basis": "advertised"
+        },
+        "dataAllowance": {
+          "kind": "unlimited"
+        },
+        "contract": {
+          "kind": "none"
+        },
+        "priceComponents": [
+          {
+            "type": "base_recurring",
+            "label": "Base rate",
+            "amount": {
+              "kind": "known",
+              "amountCents": 5500,
+              "currency": "USD"
+            },
+            "cadence": "monthly",
+            "appliesFromMonth": null,
+            "appliesThroughMonth": null,
+            "requiredConditions": [],
+            "included": true
+          },
+          {
+            "type": "tax_excluded",
+            "label": "Taxes (not included)",
+            "amount": {
+              "kind": "unknown",
+              "reason": "varies_by_location"
+            },
+            "cadence": "monthly",
+            "appliesFromMonth": null,
+            "appliesThroughMonth": null,
+            "requiredConditions": [],
+            "included": true
+          }
+        ],
+        "postPromotionMonthly": {
+          "kind": "known",
+          "amountCents": 5500,
+          "currency": "USD"
+        },
+        "conditions": [],
+        "orderUrl": "https://example.com/reference/slow/order",
+        "broadbandFactsUrl": null,
+        "provenance": {
+          "schemaVersion": 1,
+          "sourceType": "synthetic",
+          "sourceDomain": "example.com",
+          "sourceUrl": "https://example.com/reference",
+          "retrievedAt": "2026-09-03T00:00:00.000Z",
+          "dataVintage": null,
+          "lastReviewed": "2026-09-03",
+          "geographicPrecision": "address",
+          "adapterVersion": "1.0.0",
+          "parserVersion": "1.0.0",
+          "contentHash": null,
+          "limitations": ["deterministic synthetic reference data"]
+        }
+      }
+    ]
   }
 }

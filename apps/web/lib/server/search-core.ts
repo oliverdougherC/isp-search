@@ -6,7 +6,7 @@ import {
 } from '@isp-search/db';
 import { createJobQueue, type JobQueue } from '@isp-search/db/queue';
 import { createRegistryCandidateDiscovery } from '@isp-search/discovery';
-import { referenceAdapterSet } from '@isp-search/providers';
+import { referenceAdapterSetForEnvironment } from '@isp-search/providers';
 import {
   createSmartyResolver,
   createSyntheticResolver,
@@ -44,7 +44,10 @@ export function getSearchCore(): SearchCore {
     schema: env.JOB_QUEUE_SCHEMA,
     logger: getLogger(),
   });
-  const adapters = referenceAdapterSet();
+  const adapters = referenceAdapterSetForEnvironment({
+    nodeEnv: env.NODE_ENV,
+    allowReferenceAdapters: env.ALLOW_REFERENCE_ADAPTERS,
+  });
   const adapterVersionByProvider = new Map(
     adapters.map((adapter) => [adapter.providerId, adapter.version]),
   );

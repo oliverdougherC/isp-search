@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { AdapterOutcome } from '@isp-search/domain';
+import { AddressOffer, AdapterOutcome } from '@isp-search/domain';
 import { z } from 'zod';
 
 /**
@@ -32,6 +32,8 @@ export const ReferenceFixtureBody = z
   .object({
     outcome: AdapterOutcome,
     actionOptions: z.array(z.string()).optional(),
+    /** Validated domain offers, attached whenever the scenario ends `available` (PLA-370). */
+    offers: z.array(AddressOffer).max(10).optional(),
     diagnostics: z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])).optional(),
   })
   .strict();

@@ -25,6 +25,7 @@ export {
   createReferenceAdapter,
   referenceAdapterFor,
   referenceAdapterSet,
+  referenceAdapterSetForEnvironment,
   type ReferenceScenario,
 } from './reference/index.js';
 export {

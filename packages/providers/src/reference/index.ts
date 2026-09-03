@@ -28,6 +28,19 @@ export function referenceAdapterSet(): ProviderAdapter[] {
   );
 }
 
+/**
+ * Environment-gated adapter set (PLA-370): reference adapters are synthetic-only and CANNOT
+ * be enabled accidentally in production — a production process gets an empty set (link-only
+ * product) unless `ALLOW_REFERENCE_ADAPTERS=true` is set deliberately for a controlled demo.
+ */
+export function referenceAdapterSetForEnvironment(env: {
+  readonly nodeEnv: string;
+  readonly allowReferenceAdapters: boolean;
+}): ProviderAdapter[] {
+  if (env.nodeEnv === 'production' && !env.allowReferenceAdapters) return [];
+  return referenceAdapterSet();
+}
+
 /** Fixture-name based scenario access, used by contract tests. */
 export const REFERENCE_SCENARIOS = [
   'available',

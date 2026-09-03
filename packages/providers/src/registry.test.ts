@@ -38,3 +38,18 @@ describe('adapter registry', () => {
     ).toThrow(/duplicate/);
   });
 });
+
+describe('reference adapter production gate', () => {
+  it('yields an empty set in production unless explicitly allowed', async () => {
+    const { referenceAdapterSetForEnvironment } = await import('./reference/index.js');
+    expect(
+      referenceAdapterSetForEnvironment({ nodeEnv: 'production', allowReferenceAdapters: false }),
+    ).toHaveLength(0);
+    expect(
+      referenceAdapterSetForEnvironment({ nodeEnv: 'production', allowReferenceAdapters: true }),
+    ).toHaveLength(11);
+    expect(
+      referenceAdapterSetForEnvironment({ nodeEnv: 'development', allowReferenceAdapters: false }),
+    ).toHaveLength(11);
+  });
+});
