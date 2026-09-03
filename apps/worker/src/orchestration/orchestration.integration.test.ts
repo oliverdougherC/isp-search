@@ -154,7 +154,7 @@ afterAll(async () => {
 
 describe('fan-out', () => {
   it('creates candidates and one idempotent job per enabled provider, transactionally', async () => {
-    const searchId = await newSearch('100 Synthetic Way');
+    const searchId = await newSearch('101 Synthetic Way');
     const result = await startQualification(handle, searchId, orchestration);
     if (result.status !== 'started') throw new Error(`unexpected ${result.status}`);
     expect(result.candidates).toBe(12);
@@ -188,7 +188,7 @@ describe('fan-out', () => {
   });
 
   it('a discovery outage fails the search with a typed reason, never fabricated candidates', async () => {
-    const searchId = await newSearch('100 Synthetic Way');
+    const searchId = await newSearch('102 Synthetic Way');
     const broken: OrchestrationDeps = {
       ...orchestration,
       discovery: createRegistryCandidateDiscovery({
@@ -206,7 +206,7 @@ describe('fan-out', () => {
     await handle.pool.query(
       "insert into provider_health (provider_id, circuit_state, reason) values ('reference-malformed','open','manual_disable') on conflict (provider_id) do update set circuit_state='open'",
     );
-    const searchId = await newSearch('100 Synthetic Way');
+    const searchId = await newSearch('103 Synthetic Way');
     await startQualification(handle, searchId, orchestration);
     const job = await jobRow(searchId, 'reference-malformed');
     expect(job?.state).toBe('degraded');
@@ -219,7 +219,7 @@ describe('fan-out', () => {
 
 describe('processing and truth', () => {
   it('processes available and unavailable to succeeded jobs; duplicates converge', async () => {
-    const searchId = await newSearch('100 Synthetic Way');
+    const searchId = await newSearch('104 Synthetic Way');
     await startQualification(handle, searchId, orchestration);
     const row = await searchRow(searchId);
     const deadline = row.deadline_at;
@@ -243,7 +243,7 @@ describe('processing and truth', () => {
   });
 
   it('retries transient outcomes within the budget and degrades afterwards', async () => {
-    const searchId = await newSearch('100 Synthetic Way');
+    const searchId = await newSearch('105 Synthetic Way');
     await startQualification(handle, searchId, orchestration);
     const deadline = (await searchRow(searchId)).deadline_at;
     const data = jobData(searchId, 'reference-timeout', deadline);
@@ -258,7 +258,7 @@ describe('processing and truth', () => {
   });
 
   it('rate-limited succeeds on the retry attempt', async () => {
-    const searchId = await newSearch('100 Synthetic Way');
+    const searchId = await newSearch('106 Synthetic Way');
     await startQualification(handle, searchId, orchestration);
     const deadline = (await searchRow(searchId)).deadline_at;
     const data = jobData(searchId, 'reference-rate-limited', deadline);
@@ -270,7 +270,7 @@ describe('processing and truth', () => {
   });
 
   it('maintenance failures (malformed) settle degraded without retry', async () => {
-    const searchId = await newSearch('100 Synthetic Way');
+    const searchId = await newSearch('107 Synthetic Way');
     await startQualification(handle, searchId, orchestration);
     const deadline = (await searchRow(searchId)).deadline_at;
     await processJob(jobData(searchId, 'reference-malformed', deadline));
@@ -281,7 +281,7 @@ describe('processing and truth', () => {
   });
 
   it('a unit-required provider pauses alone; peers stay visible; resume completes it', async () => {
-    const searchId = await newSearch('100 Synthetic Way');
+    const searchId = await newSearch('108 Synthetic Way');
     await startQualification(handle, searchId, orchestration);
     const deadline = (await searchRow(searchId)).deadline_at;
     await processJob(jobData(searchId, 'reference-available', deadline));
@@ -315,7 +315,7 @@ describe('processing and truth', () => {
   });
 
   it('a crashed worker redelivery continues the same job row', async () => {
-    const searchId = await newSearch('100 Synthetic Way');
+    const searchId = await newSearch('109 Synthetic Way');
     await startQualification(handle, searchId, orchestration);
     const deadline = (await searchRow(searchId)).deadline_at;
     // Simulate a crash: claim marks running, then nothing settles.
@@ -338,7 +338,7 @@ describe('processing and truth', () => {
 
 describe('deadline and late results', () => {
   it('discards a result that finishes after the global deadline', async () => {
-    const searchId = await newSearch('100 Synthetic Way', { deadlineSeconds: 3 });
+    const searchId = await newSearch('110 Synthetic Way', { deadlineSeconds: 3 });
     await startQualification(handle, searchId, orchestration);
     const deadline = (await searchRow(searchId)).deadline_at;
     // The late adapter deliberately returns ~2s after the deadline.
@@ -354,7 +354,7 @@ describe('deadline and late results', () => {
   });
 
   it('the deadline sweep expires unsettled jobs and completes the search truthfully', async () => {
-    const searchId = await newSearch('100 Synthetic Way', { deadlineSeconds: 2 });
+    const searchId = await newSearch('111 Synthetic Way', { deadlineSeconds: 2 });
     await startQualification(handle, searchId, orchestration);
     const deadline = (await searchRow(searchId)).deadline_at;
     // One provider finished before the deadline.
@@ -376,7 +376,7 @@ describe('deadline and late results', () => {
   });
 
   it('claims past the deadline are discarded and expired without running the adapter', async () => {
-    const searchId = await newSearch('100 Synthetic Way', { deadlineSeconds: 1 });
+    const searchId = await newSearch('112 Synthetic Way', { deadlineSeconds: 1 });
     await startQualification(handle, searchId, orchestration);
     const deadline = (await searchRow(searchId)).deadline_at;
     await new Promise((resolve) => setTimeout(resolve, 1_100));
@@ -389,7 +389,7 @@ describe('deadline and late results', () => {
 
 describe('failure isolation and completion semantics', () => {
   it('one provider failing never hides other results; mixed searches complete', async () => {
-    const searchId = await newSearch('100 Synthetic Way', { deadlineSeconds: 8 });
+    const searchId = await newSearch('113 Synthetic Way', { deadlineSeconds: 8 });
     await startQualification(handle, searchId, orchestration);
     const deadline = (await searchRow(searchId)).deadline_at;
     // Fast providers first (all instant under the fake-free clock)...
