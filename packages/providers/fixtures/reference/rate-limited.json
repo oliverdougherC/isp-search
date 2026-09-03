@@ -5,13 +5,91 @@
     "adapterVersion": "1.0.0",
     "parserVersion": "1.0.0",
     "sanitation": "Hand-written synthetic outcome. Rate limited on the first attempt, then succeeds on retry.",
-    "fingerprint": "sha256:57890afac137ea9df09f2406f8ffbdc90c2365f4427f43d1d21f8e912d0d7fa8"
+    "fingerprint": "sha256:600a8c8792afe4244bd46867867cb8937c580667a7129afed81429cd65acd4be"
   },
   "body": {
     "outcome": "rate_limited",
     "diagnostics": {
       "scenario": "rate-limited",
       "succeeds_from_attempt": 2
-    }
+    },
+    "offers": [
+      {
+        "kind": "address_offer",
+        "schemaVersion": 1,
+        "providerId": "reference-rate-limited",
+        "offerKey": "wireless-basic",
+        "planKey": "wireless-basic",
+        "name": "Wireless Basic",
+        "technology": "fixed_wireless",
+        "download": {
+          "kind": "known",
+          "mbps": 200,
+          "basis": "advertised"
+        },
+        "upload": {
+          "kind": "known",
+          "mbps": 15,
+          "basis": "advertised"
+        },
+        "dataAllowance": {
+          "kind": "unlimited"
+        },
+        "contract": {
+          "kind": "none"
+        },
+        "priceComponents": [
+          {
+            "type": "base_recurring",
+            "label": "Base rate",
+            "amount": {
+              "kind": "known",
+              "amountCents": 5500,
+              "currency": "USD"
+            },
+            "cadence": "monthly",
+            "appliesFromMonth": null,
+            "appliesThroughMonth": null,
+            "requiredConditions": [],
+            "included": true
+          },
+          {
+            "type": "tax_excluded",
+            "label": "Taxes (not included)",
+            "amount": {
+              "kind": "unknown",
+              "reason": "varies_by_location"
+            },
+            "cadence": "monthly",
+            "appliesFromMonth": null,
+            "appliesThroughMonth": null,
+            "requiredConditions": [],
+            "included": true
+          }
+        ],
+        "postPromotionMonthly": {
+          "kind": "known",
+          "amountCents": 5500,
+          "currency": "USD"
+        },
+        "conditions": [],
+        "orderUrl": "https://example.com/reference/rate-limited/order",
+        "broadbandFactsUrl": null,
+        "provenance": {
+          "schemaVersion": 1,
+          "sourceType": "synthetic",
+          "sourceDomain": "example.com",
+          "sourceUrl": "https://example.com/reference",
+          "retrievedAt": "2026-09-03T00:00:00.000Z",
+          "dataVintage": null,
+          "lastReviewed": "2026-09-03",
+          "geographicPrecision": "address",
+          "adapterVersion": "1.0.0",
+          "parserVersion": "1.0.0",
+          "contentHash": null,
+          "limitations": ["deterministic synthetic reference data"]
+        }
+      }
+    ]
   }
 }

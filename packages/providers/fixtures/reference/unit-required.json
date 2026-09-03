@@ -5,13 +5,91 @@
     "adapterVersion": "1.0.0",
     "parserVersion": "1.0.0",
     "sanitation": "Hand-written synthetic outcome with synthetic unit labels.",
-    "fingerprint": "sha256:7228402a6d2cac5c931b705d19ebb488f541bad7ff587641958a8dbbee698144"
+    "fingerprint": "sha256:86371082008c14b23cb717413ce94131edd44cd62aafe1dca4c8d4fa451d9845"
   },
   "body": {
     "outcome": "unit_required",
     "actionOptions": ["Unit 1A", "Unit 1B", "Unit 2A"],
     "diagnostics": {
       "scenario": "unit-required"
-    }
+    },
+    "offers": [
+      {
+        "kind": "address_offer",
+        "schemaVersion": 1,
+        "providerId": "reference-unit-required",
+        "offerKey": "mdu-fiber-300",
+        "planKey": "mdu-fiber-300",
+        "name": "MDU Fiber 300",
+        "technology": "fiber",
+        "download": {
+          "kind": "known",
+          "mbps": 300,
+          "basis": "advertised"
+        },
+        "upload": {
+          "kind": "known",
+          "mbps": 300,
+          "basis": "advertised"
+        },
+        "dataAllowance": {
+          "kind": "unlimited"
+        },
+        "contract": {
+          "kind": "none"
+        },
+        "priceComponents": [
+          {
+            "type": "base_recurring",
+            "label": "Base rate",
+            "amount": {
+              "kind": "known",
+              "amountCents": 5500,
+              "currency": "USD"
+            },
+            "cadence": "monthly",
+            "appliesFromMonth": null,
+            "appliesThroughMonth": null,
+            "requiredConditions": [],
+            "included": true
+          },
+          {
+            "type": "tax_excluded",
+            "label": "Taxes (not included)",
+            "amount": {
+              "kind": "unknown",
+              "reason": "varies_by_location"
+            },
+            "cadence": "monthly",
+            "appliesFromMonth": null,
+            "appliesThroughMonth": null,
+            "requiredConditions": [],
+            "included": true
+          }
+        ],
+        "postPromotionMonthly": {
+          "kind": "known",
+          "amountCents": 5500,
+          "currency": "USD"
+        },
+        "conditions": [],
+        "orderUrl": "https://example.com/reference/unit-required/order",
+        "broadbandFactsUrl": null,
+        "provenance": {
+          "schemaVersion": 1,
+          "sourceType": "synthetic",
+          "sourceDomain": "example.com",
+          "sourceUrl": "https://example.com/reference",
+          "retrievedAt": "2026-09-03T00:00:00.000Z",
+          "dataVintage": null,
+          "lastReviewed": "2026-09-03",
+          "geographicPrecision": "address",
+          "adapterVersion": "1.0.0",
+          "parserVersion": "1.0.0",
+          "contentHash": null,
+          "limitations": ["deterministic synthetic reference data"]
+        }
+      }
+    ]
   }
 }

@@ -110,3 +110,132 @@ a {
   color: var(--muted);
   font-size: 0.85em;
 }
+
+/* --- M2 search surface (PLA-370) --- */
+.search-shell {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+.search-form {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 28rem;
+}
+.search-form label {
+  display: grid;
+  gap: 0.25rem;
+  font-weight: 600;
+}
+.search-form input {
+  padding: 0.5rem;
+  border: 1px solid #8888;
+  border-radius: 4px;
+  font: inherit;
+}
+.search-form .consent {
+  font-weight: 400;
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+.search-shell button {
+  padding: 0.5rem 0.9rem;
+  border-radius: 6px;
+  border: 1px solid #8886;
+  cursor: pointer;
+  font: inherit;
+}
+.search-shell button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.search-header {
+  display: grid;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+.display-address {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+.provider-list {
+  display: grid;
+  gap: 1rem;
+}
+.provider-card {
+  border: 1px solid #8884;
+  border-radius: 8px;
+  padding: 1rem;
+}
+.provider-card header {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.provider-card h3 {
+  margin: 0;
+}
+.tech-line,
+.job-line,
+.provenance,
+.market-line {
+  color: #555;
+  font-size: 0.9rem;
+}
+.offer {
+  border-top: 1px dashed #8885;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+}
+.offer h4 {
+  margin: 0 0 0.25rem;
+}
+.price-components,
+.conditions {
+  margin: 0.25rem 0;
+  padding-left: 1.25rem;
+}
+.notice {
+  border: 1px solid #b58900aa;
+  background: #b5890011;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin: 0.75rem 0;
+  display: grid;
+  gap: 0.5rem;
+  justify-items: start;
+}
+.error {
+  color: #b00020;
+  font-weight: 600;
+}
+.completeness {
+  margin-top: 2rem;
+  border-top: 1px solid #8884;
+  padding-top: 1rem;
+  font-size: 0.9rem;
+  color: #444;
+}
+.evidence {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+.foundation-note {
+  max-width: 46rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  color: #555;
+  font-size: 0.9rem;
+}
+@media (prefers-color-scheme: dark) {
+  .tech-line,
+  .job-line,
+  .provenance,
+  .market-line,
+  .completeness,
+  .foundation-note {
+    color: #aaa;
+  }
+}

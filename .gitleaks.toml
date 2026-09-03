@@ -8,12 +8,15 @@ useDefault = true
 
 [allowlist]
 description = "Intentional test canaries and ignored build output"
+regexTarget = "line"
 regexes = [
   '''CANARY[-_][A-Za-z0-9_-]+''',
   '''test-secret-that-is-at-least-32-characters-long''',
   '''another-secret-that-is-at-least-32-characters-long''',
   '''AKIAABCDEFGHIJKLMNOP''',
   '''eyJhbGciOiJIUzI1NiJ9\.eyJjYW5hcnkiOnRydWV9\.CANARYSIGNATURE''',
+  # Domain identifiers in synthetic fixtures/tests, not credentials: offer and plan slugs.
+  '''"(offerKey|planKey)":\s*"[a-z0-9-]+"''',
 ]
 paths = [
   '''(^|/)\.env$''',

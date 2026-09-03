@@ -103,7 +103,12 @@ function buildResult(
     (body.outcome === 'unit_required' || body.outcome === 'address_ambiguous') &&
     request.actionResponse !== undefined
   ) {
-    return { outcome: 'available', evidence, diagnostics: { code: 'resumed_after_action' } };
+    return {
+      outcome: 'available',
+      evidence,
+      ...(body.offers ? { offers: body.offers } : {}),
+      diagnostics: { code: 'resumed_after_action' },
+    };
   }
   // Transient scenario: rate limited until the configured attempt is reached.
   const succeedsFrom = body.diagnostics?.['succeeds_from_attempt'];
@@ -112,12 +117,18 @@ function buildResult(
     typeof succeedsFrom === 'number' &&
     request.attempt >= succeedsFrom
   ) {
-    return { outcome: 'available', evidence, diagnostics: { code: 'succeeded_after_retry' } };
+    return {
+      outcome: 'available',
+      evidence,
+      ...(body.offers ? { offers: body.offers } : {}),
+      diagnostics: { code: 'succeeded_after_retry' },
+    };
   }
   return {
     outcome: body.outcome,
     evidence,
     ...(body.actionOptions ? { actionOptions: body.actionOptions } : {}),
+    ...(body.outcome === 'available' && body.offers ? { offers: body.offers } : {}),
     diagnostics: body.diagnostics ?? {},
   };
 }

@@ -5,12 +5,356 @@
     "adapterVersion": "1.0.0",
     "parserVersion": "1.0.0",
     "sanitation": "Hand-written synthetic outcome. No provider response was captured.",
-    "fingerprint": "sha256:ef4f93244dd3de4c5bd6ac37a9d9f159ee3075060778acbdbe7fb631dbf1a50e"
+    "fingerprint": "sha256:c18602646e74e0c65343f1ad6883f0d25f06c4cde6e27f0a0ebc27ae5a94f128"
   },
   "body": {
     "outcome": "available",
     "diagnostics": {
       "scenario": "available"
-    }
+    },
+    "offers": [
+      {
+        "kind": "address_offer",
+        "schemaVersion": 1,
+        "providerId": "reference-available",
+        "offerKey": "fiber-1gig-promo",
+        "planKey": "fiber-1gig",
+        "name": "Fiber 1 Gig",
+        "technology": "fiber",
+        "download": {
+          "kind": "known",
+          "mbps": 1000,
+          "basis": "advertised"
+        },
+        "upload": {
+          "kind": "known",
+          "mbps": 1000,
+          "basis": "advertised"
+        },
+        "dataAllowance": {
+          "kind": "unlimited"
+        },
+        "contract": {
+          "kind": "none"
+        },
+        "priceComponents": [
+          {
+            "type": "introductory_recurring",
+            "label": "Promotional rate (months 1-12)",
+            "amount": {
+              "kind": "known",
+              "amountCents": 6500,
+              "currency": "USD"
+            },
+            "cadence": "monthly",
+            "appliesFromMonth": 1,
+            "appliesThroughMonth": 12,
+            "requiredConditions": [],
+            "included": true
+          },
+          {
+            "type": "base_recurring",
+            "label": "Standard rate (from month 13)",
+            "amount": {
+              "kind": "known",
+              "amountCents": 8500,
+              "currency": "USD"
+            },
+            "cadence": "monthly",
+            "appliesFromMonth": 13,
+            "appliesThroughMonth": null,
+            "requiredConditions": [],
+            "included": true
+          },
+          {
+            "type": "recurring_discount",
+            "label": "Auto Pay + paperless discount",
+            "amount": {
+              "kind": "known",
+              "amountCents": -1000,
+              "currency": "USD"
+            },
+            "cadence": "monthly",
+            "appliesFromMonth": null,
+            "appliesThroughMonth": null,
+            "requiredConditions": ["auto_pay", "paperless_billing"],
+            "included": true
+          },
+          {
+            "type": "equipment_rental",
+            "label": "Wi-Fi gateway (included)",
+            "amount": {
+              "kind": "known",
+              "amountCents": 0,
+              "currency": "USD"
+            },
+            "cadence": "monthly",
+            "appliesFromMonth": null,
+            "appliesThroughMonth": null,
+            "requiredConditions": [],
+            "included": true
+          },
+          {
+            "type": "installation",
+            "label": "Professional installation",
+            "amount": {
+              "kind": "known",
+              "amountCents": 9900,
+              "currency": "USD"
+            },
+            "cadence": "one_time",
+            "appliesFromMonth": null,
+            "appliesThroughMonth": null,
+            "requiredConditions": [],
+            "included": true
+          }
+        ],
+        "postPromotionMonthly": {
+          "kind": "known",
+          "amountCents": 8500,
+          "currency": "USD"
+        },
+        "conditions": [
+          {
+            "type": "auto_pay",
+            "description": "Discount requires Auto Pay enrollment."
+          },
+          {
+            "type": "paperless_billing",
+            "description": "Discount requires paperless billing."
+          }
+        ],
+        "orderUrl": "https://example.com/reference/available/order",
+        "broadbandFactsUrl": "https://example.com/reference/available/broadband-facts/fiber-1gig",
+        "provenance": {
+          "schemaVersion": 1,
+          "sourceType": "synthetic",
+          "sourceDomain": "example.com",
+          "sourceUrl": "https://example.com/reference",
+          "retrievedAt": "2026-09-03T00:00:00.000Z",
+          "dataVintage": null,
+          "lastReviewed": "2026-09-03",
+          "geographicPrecision": "address",
+          "adapterVersion": "1.0.0",
+          "parserVersion": "1.0.0",
+          "contentHash": null,
+          "limitations": ["deterministic synthetic reference data"]
+        }
+      },
+      {
+        "kind": "address_offer",
+        "schemaVersion": 1,
+        "providerId": "reference-available",
+        "offerKey": "cable-500-promo",
+        "planKey": "cable-500",
+        "name": "Cable 500",
+        "technology": "cable",
+        "download": {
+          "kind": "known",
+          "mbps": 500,
+          "basis": "advertised"
+        },
+        "upload": {
+          "kind": "known",
+          "mbps": 20,
+          "basis": "advertised"
+        },
+        "dataAllowance": {
+          "kind": "capped",
+          "gigabytes": 1229
+        },
+        "contract": {
+          "kind": "term",
+          "months": 12,
+          "earlyTerminationFee": {
+            "kind": "known",
+            "amountCents": 12000,
+            "currency": "USD"
+          }
+        },
+        "priceComponents": [
+          {
+            "type": "introductory_recurring",
+            "label": "Promotional rate (months 1-12)",
+            "amount": {
+              "kind": "known",
+              "amountCents": 4500,
+              "currency": "USD"
+            },
+            "cadence": "monthly",
+            "appliesFromMonth": 1,
+            "appliesThroughMonth": 12,
+            "requiredConditions": [],
+            "included": true
+          },
+          {
+            "type": "equipment_rental",
+            "label": "Modem rental (optional)",
+            "amount": {
+              "kind": "known",
+              "amountCents": 1500,
+              "currency": "USD"
+            },
+            "cadence": "monthly",
+            "appliesFromMonth": null,
+            "appliesThroughMonth": null,
+            "requiredConditions": [],
+            "included": false
+          },
+          {
+            "type": "activation",
+            "label": "Activation fee",
+            "amount": {
+              "kind": "known",
+              "amountCents": 2500,
+              "currency": "USD"
+            },
+            "cadence": "one_time",
+            "appliesFromMonth": null,
+            "appliesThroughMonth": null,
+            "requiredConditions": [],
+            "included": true
+          },
+          {
+            "type": "tax_excluded",
+            "label": "Taxes and local fees (not included)",
+            "amount": {
+              "kind": "unknown",
+              "reason": "varies_by_location"
+            },
+            "cadence": "monthly",
+            "appliesFromMonth": null,
+            "appliesThroughMonth": null,
+            "requiredConditions": [],
+            "included": true
+          }
+        ],
+        "postPromotionMonthly": {
+          "kind": "unknown",
+          "reason": "not_disclosed"
+        },
+        "conditions": [
+          {
+            "type": "new_customer",
+            "description": "Promotional rate is for new customers only."
+          }
+        ],
+        "orderUrl": "https://example.com/reference/available/order-cable",
+        "broadbandFactsUrl": null,
+        "provenance": {
+          "schemaVersion": 1,
+          "sourceType": "synthetic",
+          "sourceDomain": "example.com",
+          "sourceUrl": "https://example.com/reference",
+          "retrievedAt": "2026-09-03T00:00:00.000Z",
+          "dataVintage": null,
+          "lastReviewed": "2026-09-03",
+          "geographicPrecision": "address",
+          "adapterVersion": "1.0.0",
+          "parserVersion": "1.0.0",
+          "contentHash": null,
+          "limitations": ["deterministic synthetic reference data"]
+        }
+      },
+      {
+        "kind": "address_offer",
+        "schemaVersion": 1,
+        "providerId": "reference-available",
+        "offerKey": "wireless-home",
+        "planKey": "wireless-home",
+        "name": "Home Wireless",
+        "technology": "fixed_wireless",
+        "download": {
+          "kind": "known",
+          "mbps": 300,
+          "basis": "typical"
+        },
+        "upload": {
+          "kind": "known",
+          "mbps": 20,
+          "basis": "typical"
+        },
+        "dataAllowance": {
+          "kind": "unlimited"
+        },
+        "contract": {
+          "kind": "none"
+        },
+        "priceComponents": [
+          {
+            "type": "base_recurring",
+            "label": "Base rate",
+            "amount": {
+              "kind": "known",
+              "amountCents": 5500,
+              "currency": "USD"
+            },
+            "cadence": "monthly",
+            "appliesFromMonth": null,
+            "appliesThroughMonth": null,
+            "requiredConditions": [],
+            "included": true
+          },
+          {
+            "type": "recurring_discount",
+            "label": "Auto Pay discount",
+            "amount": {
+              "kind": "known",
+              "amountCents": -500,
+              "currency": "USD"
+            },
+            "cadence": "monthly",
+            "appliesFromMonth": null,
+            "appliesThroughMonth": null,
+            "requiredConditions": ["auto_pay"],
+            "included": true
+          },
+          {
+            "type": "tax_excluded",
+            "label": "Taxes (not included)",
+            "amount": {
+              "kind": "unknown",
+              "reason": "varies_by_location"
+            },
+            "cadence": "monthly",
+            "appliesFromMonth": null,
+            "appliesThroughMonth": null,
+            "requiredConditions": [],
+            "included": true
+          }
+        ],
+        "postPromotionMonthly": {
+          "kind": "known",
+          "amountCents": 5500,
+          "currency": "USD"
+        },
+        "conditions": [
+          {
+            "type": "provider_caveat",
+            "description": "Eligibility is capacity-based for this address and can change."
+          },
+          {
+            "type": "auto_pay",
+            "description": "Discount requires Auto Pay."
+          }
+        ],
+        "orderUrl": "https://example.com/reference/available/order-wireless",
+        "broadbandFactsUrl": null,
+        "provenance": {
+          "schemaVersion": 1,
+          "sourceType": "synthetic",
+          "sourceDomain": "example.com",
+          "sourceUrl": "https://example.com/reference",
+          "retrievedAt": "2026-09-03T00:00:00.000Z",
+          "dataVintage": null,
+          "lastReviewed": "2026-09-03",
+          "geographicPrecision": "address",
+          "adapterVersion": "1.0.0",
+          "parserVersion": "1.0.0",
+          "contentHash": null,
+          "limitations": ["deterministic synthetic reference data"]
+        }
+      }
+    ]
   }
 }

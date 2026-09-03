@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "web",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "PORT=3200 node scripts/with-env.mjs sh -c 'PORT=3200 pnpm --filter @isp-search/web dev'"
+      ],
+      "port": 3200
+    }
+  ]
+}
