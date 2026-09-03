@@ -6,10 +6,14 @@ const SECRET_CANARY = 'CANARY-HMAC-SECRET-0123456789abcdef0123456789abcdef';
 // secretlint-disable-next-line -- intentionally fake canary connection string
 const DB_CANARY = 'postgres://canary_user:CANARY-DB-PASSWORD@localhost:5432/canary_db';
 
+// 64 lowercase hex chars; intentionally fake.
+const RAW_KEY_CANARY = 'deadbeef'.repeat(8);
+
 const valid = {
   NODE_ENV: 'test',
   DATABASE_URL: DB_CANARY,
   ADDRESS_HMAC_SECRET: SECRET_CANARY,
+  RAW_ADDRESS_ENCRYPTION_KEY: RAW_KEY_CANARY,
 };
 
 describe('loadWebServerEnv', () => {

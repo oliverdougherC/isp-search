@@ -1,5 +1,5 @@
 import { loadWorkerEnv } from '@isp-search/config/server';
-import { checkDatabaseReadiness, createDatabase } from '@isp-search/db';
+import { checkDatabaseReadiness, createDatabase, sweepRetention } from '@isp-search/db';
 import { createJobQueue, QUEUES } from '@isp-search/db/queue';
 import { createLogger, newCorrelationId, toLoggableError } from '@isp-search/observability';
 
@@ -64,6 +64,18 @@ async function main(argv: readonly string[]): Promise<number> {
       await Promise.resolve();
     },
   );
+
+  // Retention sweep (PLA-362, ADR-007): scheduled every 5 minutes on the singleton queue.
+  // The summary contains counts and typed codes only — safe to log.
+  await queue.boss.work(QUEUES.retention, { batchSize: 1 }, async () => {
+    const summary = await sweepRetention(handle.db, new Date());
+    if (summary.failures.length > 0) {
+      logger.error({ ...summary }, 'retention sweep completed with failures');
+    } else {
+      logger.info({ ...summary }, 'retention sweep complete');
+    }
+  });
+  await queue.boss.schedule(QUEUES.retention, '*/5 * * * *');
 
   const server = createHealthServer({
     port: env.WORKER_HEALTH_PORT,

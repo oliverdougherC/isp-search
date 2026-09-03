@@ -21,4 +21,28 @@ export {
   type MigrationJournal,
 } from './migrations.js';
 export { REFERENCE_PROVIDER_SEED, seedReferenceProviders } from './seed.js';
+export {
+  sealAddressMaterial,
+  openAddressMaterial,
+  AddressMaterial,
+  AddressMaterialError,
+  type RawAddressKey,
+} from './address-material.js';
+export {
+  createSearchSession,
+  getSearch,
+  isSearchExpired,
+  newSearchId,
+  type CreateSearchSessionInput,
+  type CreatedSearchSession,
+  type SessionPolicy,
+} from './sessions.js';
+export {
+  deleteRawAddress,
+  deleteRawAddressIfAllSettled,
+  newSweepRunId,
+  sweepRetention,
+  type RetentionTrigger,
+  type SweepSummary,
+} from './retention.js';
 export * as schema from './schema/index.js';

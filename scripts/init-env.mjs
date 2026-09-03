@@ -12,6 +12,11 @@ if (existsSync(target)) {
 }
 const template = readFileSync(resolve(root, '.env.example'), 'utf8');
 const secret = randomBytes(32).toString('hex');
-const content = template.replace(/^ADDRESS_HMAC_SECRET=.*$/m, `ADDRESS_HMAC_SECRET=${secret}`);
+const rawKey = randomBytes(32).toString('hex');
+const content = template
+  .replace(/^ADDRESS_HMAC_SECRET=.*$/m, `ADDRESS_HMAC_SECRET=${secret}`)
+  .replace(/^RAW_ADDRESS_ENCRYPTION_KEY=.*$/m, `RAW_ADDRESS_ENCRYPTION_KEY=${rawKey}`);
 writeFileSync(target, content, { mode: 0o600 });
-console.log('Wrote .env with a generated ADDRESS_HMAC_SECRET (file mode 600).');
+console.log(
+  'Wrote .env with generated ADDRESS_HMAC_SECRET and RAW_ADDRESS_ENCRYPTION_KEY (mode 600).',
+);
