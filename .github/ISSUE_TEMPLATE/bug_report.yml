@@ -1,0 +1,40 @@
+name: Bug report
+description: Something behaves incorrectly.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include a real residential address, unit, cookie, token, or provider response.
+        Describe the shape of the input (for example "an apartment address with a missing unit").
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: Expected versus actual behaviour.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Use synthetic inputs only. Include commands and the commit SHA.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Redacted logs, test output, or screenshots with no address visible.
+  - type: input
+    id: linear
+    attributes:
+      label: Related Linear issue
+      placeholder: PLA-___
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy check
+      options:
+        - label: This report contains no real address, personal data, credential, or provider payload.
+          required: true
