@@ -79,4 +79,12 @@ export {
   type StartQualificationResult,
 } from './orchestration.js';
 export { buildSearchResource, type SearchReadResult } from './read-model.js';
+export {
+  findReusableQualification,
+  readCatalogPlans,
+  upsertCatalogPlan,
+  type CachedCatalogPlan,
+  type CatalogCachePolicy,
+  type ReusableQualification,
+} from './caches.js';
 export * as schema from './schema/index.js';
