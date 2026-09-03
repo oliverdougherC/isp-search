@@ -14,6 +14,8 @@ regexes = [
   '''another-secret-that-is-at-least-32-characters-long''',
   '''AKIAABCDEFGHIJKLMNOP''',
   '''eyJhbGciOiJIUzI1NiJ9\.eyJjYW5hcnkiOnRydWV9\.CANARYSIGNATURE''',
+  # Domain identifiers in synthetic fixtures/tests, not credentials: offer and plan slugs.
+  '''"(offerKey|planKey)":\s*"[a-z0-9-]+"''',
 ]
 paths = [
   '''(^|/)\.env$''',
