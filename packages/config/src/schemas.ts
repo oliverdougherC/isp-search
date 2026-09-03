@@ -66,6 +66,11 @@ const SharedServerSchema = z.object({
    * maintainer provisions credentials/terms.
    */
   ADDRESS_RESOLVER: z.enum(['synthetic', 'smarty']).default('synthetic'),
+  /**
+   * Comma-separated provider ids allowed to run adapters; `*` = every registered adapter.
+   * Removing an id downgrades that provider to link-only (provider-disable runbook).
+   */
+  ENABLED_PROVIDER_IDS: z.string().default('*'),
   SMARTY_ENABLED: booleanFromString.default(false),
   SMARTY_AUTH_ID: z.string().min(1).optional(),
   SMARTY_AUTH_TOKEN: z.string().min(1).optional(),
@@ -74,6 +79,16 @@ const SharedServerSchema = z.object({
 export const WebServerEnvSchema = SharedServerSchema.extend({
   PORT: port.default(3000),
   APP_BASE_URL: z.url().default('http://localhost:3000'),
+  JOB_QUEUE_SCHEMA: z
+    .string()
+    .regex(/^[a-z_][a-z0-9_]{0,62}$/, 'JOB_QUEUE_SCHEMA must be a lowercase postgres identifier')
+    .default('pgboss'),
+  /** Optional bearer token for the internal deletion/expiry operation (PLA-368). */
+  INTERNAL_ADMIN_TOKEN: z.string().min(16).optional(),
+  /** POST /api/searches per-IP budget (per minute). */
+  SEARCH_CREATE_RATE_PER_MINUTE: z.coerce.number().int().min(1).max(1000).default(10),
+  /** GET /api/searches/:id per-IP budget (per minute). */
+  SEARCH_READ_RATE_PER_MINUTE: z.coerce.number().int().min(1).max(10000).default(240),
 });
 export type WebServerEnv = z.infer<typeof WebServerEnvSchema>;
 
@@ -82,11 +97,6 @@ export const WorkerEnvSchema = SharedServerSchema.extend({
   WORKER_CONCURRENCY: z.coerce.number().int().min(1).max(64).default(4),
   /** Per-provider concurrency ceiling inside one worker (PLA-367). */
   PROVIDER_CONCURRENCY: z.coerce.number().int().min(1).max(16).default(2),
-  /**
-   * Comma-separated provider ids allowed to run adapters; `*` = every registered adapter.
-   * Removing an id downgrades that provider to link-only (provider-disable runbook).
-   */
-  ENABLED_PROVIDER_IDS: z.string().default('*'),
   JOB_QUEUE_SCHEMA: z
     .string()
     .regex(/^[a-z_][a-z0-9_]{0,62}$/, 'JOB_QUEUE_SCHEMA must be a lowercase postgres identifier')
@@ -109,4 +119,5 @@ export const SECRET_ENV_NAMES: readonly string[] = [
   'ADDRESS_HMAC_SECRET',
   'RAW_ADDRESS_ENCRYPTION_KEY',
   'SMARTY_AUTH_TOKEN',
+  'INTERNAL_ADMIN_TOKEN',
 ];

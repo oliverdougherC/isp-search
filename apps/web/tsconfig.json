@@ -13,9 +13,26 @@
     "lib": ["ES2024", "DOM", "DOM.Iterable"],
     "allowJs": true,
     "types": ["node"],
-    "plugins": [{ "name": "next" }],
-    "paths": { "@/*": ["./*"] }
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", ".next"]
+  "exclude": ["node_modules", ".next"],
+  "references": [
+    {
+      "path": "../../packages/discovery"
+    },
+    {
+      "path": "../../packages/resolver"
+    },
+    {
+      "path": "../../packages/providers"
+    }
+  ]
 }
