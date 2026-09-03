@@ -180,10 +180,10 @@ describe('pg-boss queue proof (ADR-006)', () => {
     expect(redelivered).toBe(true);
   });
 
-  it('duplicate execution cannot create duplicate results when keyed by job id', async () => {
+  it('singleton key format stays stable for use as the M2 result idempotency key', async () => {
     // The persistence layer (M2) must upsert on (search, provider, adapter version). The queue
-    // guarantees at-least-once, so the proof here is that the singleton key is stable and can
-    // be used as an idempotency key by the result writer.
+    // guarantees at-least-once, so all this pins is that the singleton key format is stable so
+    // the M2 result writer can reuse it; duplicate-result prevention itself is proven in M2.
     const data = jobData();
     const a = `${data.searchId}:${data.providerId}:${data.adapterVersion}`;
     const { qualificationSingletonKey } = await import('./index.js');
