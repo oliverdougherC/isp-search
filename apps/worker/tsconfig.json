@@ -9,10 +9,23 @@
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.test.ts"],
   "references": [
-    { "path": "../../packages/domain" },
-    { "path": "../../packages/config" },
-    { "path": "../../packages/observability" },
-    { "path": "../../packages/db" },
-    { "path": "../../packages/providers" }
+    {
+      "path": "../../packages/domain"
+    },
+    {
+      "path": "../../packages/config"
+    },
+    {
+      "path": "../../packages/observability"
+    },
+    {
+      "path": "../../packages/db"
+    },
+    {
+      "path": "../../packages/providers"
+    },
+    {
+      "path": "../../packages/discovery"
+    }
   ]
 }

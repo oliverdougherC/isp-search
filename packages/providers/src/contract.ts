@@ -1,4 +1,4 @@
-import { AdapterOutcome, StructuredAddress } from '@isp-search/domain';
+import { AddressOffer, AdapterOutcome, StructuredAddress } from '@isp-search/domain';
 import { z } from 'zod';
 
 /**
@@ -33,6 +33,8 @@ export const QualificationRequest = z
      * provider (PLA-364). Never copied across providers.
      */
     actionResponse: z.string().min(1).max(80).optional(),
+    /** 1-based delivery attempt for this job (transient retries increment it). */
+    attempt: z.number().int().min(1).default(1),
   })
   .strict();
 export type QualificationRequest = z.infer<typeof QualificationRequest>;
@@ -56,6 +58,8 @@ export const QualificationResult = z
     evidence: QualificationEvidence.nullable(),
     /** Present only for `unit_required` / `address_ambiguous`; options are provider labels. */
     actionOptions: z.array(z.string().min(1).max(80)).max(50).optional(),
+    /** Address-specific offers when the outcome is `available` (validated domain objects). */
+    offers: z.array(AddressOffer).max(10).optional(),
     /** PII-free diagnostics for operators. Keys must be typed codes, not free text. */
     diagnostics: z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])).default({}),
   })
@@ -64,6 +68,8 @@ export type QualificationResult = z.infer<typeof QualificationResult>;
 
 export interface AdapterContext {
   readonly now: () => Date;
+  /** Injectable delay for deterministic tests; adapters default to a real timer. */
+  readonly sleep?: (ms: number) => Promise<void>;
 }
 
 export interface ProviderAdapter {

@@ -38,3 +38,32 @@ export function createDatabase(options: CreateDatabaseOptions): DatabaseHandle {
     },
   };
 }
+
+/**
+ * Runs `fn` inside one database transaction, exposing BOTH the Drizzle view and the raw
+ * client. The raw client exists so pg-boss can enqueue within the same transaction
+ * (`send(..., { db: { executeSql } })`, ADR-006): a search row and its jobs commit or roll
+ * back together.
+ */
+export async function withTransaction<T>(
+  handle: DatabaseHandle,
+  fn: (tx: Database, client: pg.PoolClient) => Promise<T>,
+): Promise<T> {
+  const client = await handle.pool.connect();
+  try {
+    await client.query('begin');
+    const tx = drizzle(client, { schema, casing: 'snake_case' });
+    const result = await fn(tx, client);
+    await client.query('commit');
+    return result;
+  } catch (error) {
+    try {
+      await client.query('rollback');
+    } catch {
+      // the connection is torn down below either way
+    }
+    throw error;
+  } finally {
+    client.release();
+  }
+}

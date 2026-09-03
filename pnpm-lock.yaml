@@ -189,6 +189,9 @@ importers:
       '@isp-search/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@isp-search/discovery':
+        specifier: workspace:*
+        version: link:../../packages/discovery
       '@isp-search/domain':
         specifier: workspace:*
         version: link:../../packages/domain
@@ -202,9 +205,18 @@ importers:
         specifier: 1.62.1
         version: 1.62.1
     devDependencies:
+      '@isp-search/resolver':
+        specifier: workspace:*
+        version: link:../../packages/resolver
       '@types/node':
         specifier: 'catalog:'
         version: 24.13.3
+      '@types/pg':
+        specifier: 'catalog:'
+        version: 8.23.1
+      pg:
+        specifier: 'catalog:'
+        version: 8.23.0
       tsx:
         specifier: 'catalog:'
         version: 4.23.13
