@@ -9,22 +9,24 @@ public from the first commit so that every decision, test, and privacy control i
 
 ## What exists today
 
-| Area                                                                                                               | State                                                              |
-| ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
-| Domain vocabulary (availability states, adapter outcomes, search states, address contract)                         | Implemented and tested in `packages/domain`                        |
-| Versioned keyed-HMAC address identity for future cache keys                                                        | Implemented and tested (`@isp-search/domain/address-identity`)     |
-| Typed environment schemas with fail-fast startup validation                                                        | Implemented in `packages/config`                                   |
-| Structured PII-safe logging, redaction, opaque correlation IDs, safe errors                                        | Implemented and canary-tested in `packages/observability`          |
-| PostgreSQL schema, explicit Drizzle migrations, health and readiness checks, seed                                  | Implemented in `packages/db`                                       |
-| PostgreSQL-backed job queue wrapper (pg-boss)                                                                      | Foundation only; proof-of-concept and ADR-006 tracked in PLA-355   |
-| Provider adapter contract, registry with kill switch, deterministic reference adapters                             | Implemented in `packages/providers`; **no live provider adapters** |
-| Next.js web shell with `/api/health` and `/api/ready`                                                              | Implemented in `apps/web`                                          |
-| Long-running worker with health/readiness HTTP surface and graceful shutdown                                       | Implemented in `apps/worker`                                       |
-| Network-disabled deterministic tests, fixture PII/secret scanner, client-bundle canary scan, import-boundary tests | Implemented in `tooling/`                                          |
+| Area                                                                                                                      | State                                                                             |
+| ------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Domain vocabulary (availability states, adapter outcomes, search states, address contract)                                | Implemented and tested in `packages/domain`                                       |
+| Versioned keyed-HMAC address identity for future cache keys                                                               | Implemented and tested (`@isp-search/domain/address-identity`)                    |
+| Typed environment schemas with fail-fast startup validation                                                               | Implemented in `packages/config`                                                  |
+| Structured PII-safe logging, redaction, opaque correlation IDs, safe errors                                               | Implemented and canary-tested in `packages/observability`                         |
+| PostgreSQL schema, explicit Drizzle migrations, health and readiness checks, seed                                         | Implemented in `packages/db`                                                      |
+| PostgreSQL-backed job queue (pg-boss): transactional enqueue, idempotency, bounded retries, dead-letter, crash redelivery | Implemented and proven by integration tests in `packages/db`; decision in ADR-006 |
+| Provider adapter contract, registry with kill switch, deterministic reference adapters                                    | Implemented in `packages/providers`; **no live provider adapters**                |
+| Next.js web shell with `/api/health` and `/api/ready`                                                                     | Implemented in `apps/web`                                                         |
+| Long-running worker with health/readiness HTTP surface and graceful shutdown                                              | Implemented in `apps/worker`                                                      |
+| Network-disabled deterministic tests, fixture PII/secret scanner, client-bundle canary scan, import-boundary tests        | Implemented in `tooling/`                                                         |
 
 Planning, milestones, and issues live in the Linear project
 [ISP Search](https://linear.app/platinum-labs/project/isp-search-f03fc61c15a2). Architecture
-decisions live in [`docs/adr`](docs/adr/README.md).
+decisions live in [`docs/adr`](docs/adr/README.md). The M0 feasibility result is
+[`docs/sources/m0-go-no-go.md`](docs/sources/m0-go-no-go.md): **go with constrained launch** (bounded
+launch markets, no live provider adapter approved yet, resolver selected, consented corpus pending).
 
 ## Requirements
 
@@ -37,13 +39,14 @@ decisions live in [`docs/adr`](docs/adr/README.md).
 ```bash
 git clone https://github.com/oliverdougherC/isp-search.git
 cd isp-search
-pnpm install
-pnpm env:init            # writes .env from .env.example with a generated HMAC secret
-pnpm db:up               # starts PostgreSQL 18 in Docker and waits for it to be healthy
-pnpm db:migrate          # applies the committed SQL migrations (never implicit)
-pnpm db:seed             # inserts the synthetic reference providers
-pnpm build               # builds every package (tsc project references + next build)
-pnpm dev                 # web on http://localhost:3000, worker health on http://localhost:3100
+pnpm install            # also downloads the pinned Node 24.20.0 into the workspace
+pnpm env:init           # writes .env from .env.example with a generated HMAC secret
+pnpm db:up              # starts PostgreSQL 18 in Docker (host port 55432) and waits for it
+pnpm db:migrate         # applies the committed SQL migrations (never implicit)
+pnpm build              # builds every package (tsc project references + next build)
+pnpm db:seed            # inserts the synthetic reference providers
+pnpm db:status          # readiness: connectivity + migrations applied
+pnpm dev                # web on http://localhost:3000, worker health on http://localhost:3100
 ```
 
 Health and readiness:
