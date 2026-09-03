@@ -15,6 +15,13 @@
       "when": 1788412701636,
       "tag": "0001_harsh_rage",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788413704103,
+      "tag": "0002_classy_guardian",
+      "breakpoints": true
     }
   ]
 }

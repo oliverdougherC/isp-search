@@ -45,4 +45,12 @@ export {
   type RetentionTrigger,
   type SweepSummary,
 } from './retention.js';
+export {
+  importRegistry,
+  loadActiveRegistry,
+  resolveProviderAlias,
+  NoActiveRegistryError,
+  RegistryImportError,
+  type ImportRegistryOptions,
+} from './registry.js';
 export * as schema from './schema/index.js';

@@ -48,7 +48,8 @@
     "drizzle-orm": "catalog:",
     "pg": "catalog:",
     "pg-boss": "catalog:",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "@isp-search/discovery": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",

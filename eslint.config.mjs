@@ -155,6 +155,31 @@ export default defineConfig([
     },
   },
   {
+    files: ['packages/discovery/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: SERVER_ONLY_IMPORTS.filter(
+            (p) => p.name.startsWith('@isp-search/db') || p.name === 'pg' || p.name === 'pg-boss',
+          ),
+          patterns: [
+            ...PLAYWRIGHT_PATTERNS,
+            {
+              group: [
+                '@isp-search/db',
+                '@isp-search/db/*',
+                '@isp-search/worker*',
+                '@isp-search/providers*',
+              ],
+              message: 'Discovery is pure over its registry snapshot; persistence lives in db.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ['packages/ui/**/*.ts', 'packages/ui/**/*.tsx'],
     rules: {
       'no-restricted-imports': [
