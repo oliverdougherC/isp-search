@@ -10,9 +10,13 @@ import { PgBoss } from 'pg-boss';
  *  - one job per (search, provider, adapter version) via `singletonKey`;
  *  - jobs are enqueued inside the caller's transaction so a search row and its jobs commit
  *    or roll back together;
- *  - retry budgets are bounded and differ by failure class (`classifyRetry`);
- *  - exhausted jobs move to a dead-letter queue whose payload contains identifiers only;
- *  - explicit `unavailable` / user-action outcomes are never retried.
+ *  - retry attempts are bounded (uniform transient budget with backoff);
+ *  - exhausted jobs move to a dead-letter queue whose payload contains identifiers only.
+ *
+ * Per-failure-class retry behaviour — explicit `unavailable` and user-action outcomes are never
+ * retried — is defined and unit-tested here as `retryLimitForOutcome`, but it is enforced by the
+ * M2 orchestration worker (PLA-367), which completes jobs with a typed outcome instead of
+ * failing them. The queue-level `retryLimit` alone would retry any job a worker fails.
  */
 
 export const QUEUES = {
