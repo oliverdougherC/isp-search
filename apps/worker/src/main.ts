@@ -1,9 +1,20 @@
 import { loadWorkerEnv } from '@isp-search/config/server';
-import { checkDatabaseReadiness, createDatabase, sweepRetention } from '@isp-search/db';
-import { createJobQueue, QUEUES } from '@isp-search/db/queue';
-import { createLogger, newCorrelationId, toLoggableError } from '@isp-search/observability';
+import {
+  checkDatabaseReadiness,
+  createDatabase,
+  enforceSearchDeadlines,
+  loadActiveRegistry,
+  sessionPolicyFromEnv,
+  sweepRetention,
+  type OrchestrationDeps,
+} from '@isp-search/db';
+import { createJobQueue, QUEUES, type QualificationJobData } from '@isp-search/db/queue';
+import { createRegistryCandidateDiscovery } from '@isp-search/discovery';
+import { createLogger, toLoggableError } from '@isp-search/observability';
+import { createAdapterRegistry, referenceAdapterSet } from '@isp-search/providers';
 
 import { createHealthServer } from './http/health-server.js';
+import { createQualificationProcessor } from './orchestration/processor.js';
 
 /**
  * Worker entrypoint.
@@ -49,21 +60,62 @@ async function main(argv: readonly string[]): Promise<number> {
   });
   await queue.start();
 
-  // M1: the qualification queue is registered but no live adapter is enabled. Jobs would be
-  // handled by M2 orchestration (PLA-367). Until then the handler records and completes them.
-  await queue.boss.work(
+  // M2 orchestration (PLA-367): deterministic reference adapters behind the gated registry,
+  // registry-based candidate discovery, per-provider concurrency, typed settle decisions.
+  const adapters = referenceAdapterSet();
+  const enabledProviderIds =
+    env.ENABLED_PROVIDER_IDS.trim() === '*'
+      ? new Set(adapters.map((adapter) => adapter.providerId))
+      : new Set(
+          env.ENABLED_PROVIDER_IDS.split(',')
+            .map((id) => id.trim())
+            .filter((id) => id.length > 0),
+        );
+  const registry = createAdapterRegistry(adapters, { enabledProviderIds });
+  const adapterVersionByProvider = new Map(
+    adapters.map((adapter) => [adapter.providerId, adapter.version]),
+  );
+  const orchestration: OrchestrationDeps = {
+    queue,
+    discovery: createRegistryCandidateDiscovery({
+      loadRegistry: () => loadActiveRegistry(handle),
+    }),
+    adapterVersionFor: (providerId) => adapterVersionByProvider.get(providerId) ?? null,
+    isProviderEnabled: (providerId) => enabledProviderIds.has(providerId),
+    policy: sessionPolicyFromEnv(env),
+    now: () => new Date(),
+  };
+  const processQualification = createQualificationProcessor({
+    handle,
+    registry,
+    orchestration,
+    logger,
+    providerConcurrency: env.PROVIDER_CONCURRENCY,
+  });
+  await queue.boss.work<QualificationJobData>(
     QUEUES.qualification,
-    { batchSize: 1, localConcurrency: env.WORKER_CONCURRENCY, pollingIntervalSeconds: 2 },
+    { batchSize: 1, localConcurrency: env.WORKER_CONCURRENCY, pollingIntervalSeconds: 1 },
     async (jobs) => {
       for (const job of jobs) {
-        logger.info(
-          { jobId: job.id, correlationId: newCorrelationId() },
-          'qualification job received (no-op in M1)',
-        );
+        await processQualification(job.data);
       }
-      await Promise.resolve();
     },
   );
+
+  // Global-deadline enforcement: idempotent, cheap, and safe to run often.
+  const deadlineTimer = setInterval(() => {
+    void enforceSearchDeadlines(handle, new Date()).then(
+      (summary) => {
+        if (summary.expiredJobs > 0 || summary.completedSearches > 0) {
+          logger.info(summary, 'deadline enforcement');
+        }
+      },
+      (error: unknown) => {
+        logger.error({ err: toLoggableError(error) }, 'deadline enforcement failed');
+      },
+    );
+  }, 5_000);
+  deadlineTimer.unref();
 
   // Retention sweep (PLA-362, ADR-007): scheduled every 5 minutes on the singleton queue.
   // The summary contains counts and typed codes only — safe to log.
@@ -110,6 +162,7 @@ async function main(argv: readonly string[]): Promise<number> {
       force.unref();
       void (async () => {
         try {
+          clearInterval(deadlineTimer);
           await new Promise<void>((done) => {
             server.close(() => {
               done();

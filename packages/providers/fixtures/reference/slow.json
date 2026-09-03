@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "sourceType": "synthetic",
+    "capturedAt": "2026-09-03T00:00:00.000Z",
+    "adapterVersion": "1.0.0",
+    "parserVersion": "1.0.0",
+    "sanitation": "Hand-written synthetic outcome. Finishes after a delay so progressive results are observable.",
+    "fingerprint": "sha256:fbdc0185fb73133007c58488dda7ef39e7790118353d774c0d4bc38d8b0a5591"
+  },
+  "body": {
+    "outcome": "available",
+    "diagnostics": {
+      "scenario": "slow",
+      "delay_ms": 3000
+    }
+  }
+}

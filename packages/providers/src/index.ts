@@ -18,11 +18,13 @@ export {
 } from './fixtures.js';
 export {
   REFERENCE_ADAPTER_VERSION,
+  REFERENCE_FIXTURE_BY_PROVIDER,
   REFERENCE_PARSER_VERSION,
   REFERENCE_SCENARIOS,
   allReferenceAdapters,
   createReferenceAdapter,
   referenceAdapterFor,
+  referenceAdapterSet,
   type ReferenceScenario,
 } from './reference/index.js';
 export {

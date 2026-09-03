@@ -4,6 +4,7 @@ assertServerRuntime('@isp-search/db');
 
 export {
   createDatabase,
+  withTransaction,
   type CreateDatabaseOptions,
   type Database,
   type DatabaseHandle,
@@ -33,6 +34,7 @@ export {
   getSearch,
   isSearchExpired,
   newSearchId,
+  sessionPolicyFromEnv,
   type CreateSearchSessionInput,
   type CreatedSearchSession,
   type SessionPolicy,
@@ -61,4 +63,19 @@ export {
   type AddressActionResult,
   type SearchActionFailure,
 } from './address-actions.js';
+export {
+  claimQualificationJob,
+  enforceSearchDeadlines,
+  ProviderActionError,
+  recomputeSearchState,
+  settleQualificationJob,
+  startQualification,
+  submitProviderAction,
+  type AdapterRunResult,
+  type JobClaim,
+  type OrchestrationDeps,
+  type ProviderActionFailure,
+  type SettleDecision,
+  type StartQualificationResult,
+} from './orchestration.js';
 export * as schema from './schema/index.js';

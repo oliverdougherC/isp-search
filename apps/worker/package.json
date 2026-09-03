@@ -13,7 +13,8 @@
     "dev": "tsx watch src/main.ts start",
     "start": "node dist/main.js start",
     "health": "node dist/main.js health",
-    "clean": "rm -rf dist *.tsbuildinfo"
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "test:integration": "vitest run --config vitest.integration.config.ts"
   },
   "dependencies": {
     "@isp-search/config": "workspace:*",
@@ -21,12 +22,16 @@
     "@isp-search/domain": "workspace:*",
     "@isp-search/observability": "workspace:*",
     "@isp-search/providers": "workspace:*",
-    "playwright": "1.62.1"
+    "playwright": "1.62.1",
+    "@isp-search/discovery": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "tsx": "catalog:",
     "typescript": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "@isp-search/resolver": "workspace:*",
+    "pg": "catalog:",
+    "@types/pg": "catalog:"
   }
 }

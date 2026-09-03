@@ -5,7 +5,11 @@ import { QualificationResult, type QualificationRequest } from '../contract.js';
 
 import { allReferenceAdapters, REFERENCE_SCENARIOS, referenceAdapterFor } from './index.js';
 
-const context = { now: () => new Date('2026-09-02T12:00:00.000Z') };
+const context = {
+  now: () => new Date('2026-09-02T12:00:00.000Z'),
+  // Deterministic tests never wait on real timers.
+  sleep: () => Promise.resolve(),
+};
 
 function request(overrides: Partial<QualificationRequest> = {}): QualificationRequest {
   return {
@@ -14,6 +18,7 @@ function request(overrides: Partial<QualificationRequest> = {}): QualificationRe
     correlationId: 'corr-1',
     address: syntheticAddress({ number: 7, unit: '2B' }),
     deadlineAt: '2026-09-02T12:00:30.000Z',
+    attempt: 1,
     ...overrides,
   };
 }
@@ -75,6 +80,6 @@ describe('reference adapters', () => {
   });
 
   it('every scenario has a fixture file', () => {
-    expect(REFERENCE_SCENARIOS).toHaveLength(7);
+    expect(REFERENCE_SCENARIOS).toHaveLength(13);
   });
 });

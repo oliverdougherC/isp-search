@@ -26,7 +26,8 @@ import {
  * deleted.
  */
 
-export type RetentionTrigger = 'job_completion' | 'scheduled_sweep' | 'expiry' | 'manual';
+export type RetentionTrigger =
+  'job_completion' | 'search_completion' | 'scheduled_sweep' | 'expiry' | 'manual';
 
 export function newSweepRunId(): string {
   return `sweep_${randomBytes(8).toString('hex')}`;

@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "sourceType": "synthetic",
+    "capturedAt": "2026-09-03T00:00:00.000Z",
+    "adapterVersion": "1.0.0",
+    "parserVersion": "1.0.0",
+    "sanitation": "Hand-written synthetic outcome. Deliberately returns after the global deadline so late-result discard is testable.",
+    "fingerprint": "sha256:dd7fa1e80a6c13bd6c1d8d2f686203822bdb216f8567a4e2bedb8f0cae7860c2"
+  },
+  "body": {
+    "outcome": "available",
+    "diagnostics": {
+      "scenario": "late",
+      "sleep_past_deadline_ms": 2000
+    }
+  }
+}

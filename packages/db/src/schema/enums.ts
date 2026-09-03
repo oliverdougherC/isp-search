@@ -8,6 +8,8 @@ import {
 } from '@isp-search/domain';
 import { pgEnum } from 'drizzle-orm/pg-core';
 
+type Tuple<T extends string> = [T, ...T[]];
+
 /**
  * PostgreSQL enums mirror the domain vocabulary exactly (PLA-361: no lossy strings).
  * Values come from the zod enums so the two can never drift silently; a domain change
@@ -16,19 +18,24 @@ import { pgEnum } from 'drizzle-orm/pg-core';
  * denormalization bug can never freeze weak evidence into a verified state.
  */
 
-function options(values: readonly string[]): [string, ...string[]] {
-  return [...values] as [string, ...string[]];
-}
-
-export const searchState = pgEnum('search_state', options(SearchState.options));
-export const providerJobState = pgEnum('provider_job_state', options(ProviderJobState.options));
-export const adapterOutcome = pgEnum('adapter_outcome', options(AdapterOutcome.options));
-export const evidenceClass = pgEnum('evidence_class', options(EvidenceClass.options));
+export const searchState = pgEnum('search_state', SearchState.options as Tuple<SearchState>);
+export const providerJobState = pgEnum(
+  'provider_job_state',
+  ProviderJobState.options as Tuple<ProviderJobState>,
+);
+export const adapterOutcome = pgEnum(
+  'adapter_outcome',
+  AdapterOutcome.options as Tuple<AdapterOutcome>,
+);
+export const evidenceClass = pgEnum(
+  'evidence_class',
+  EvidenceClass.options as Tuple<EvidenceClass>,
+);
 export const priceComponentType = pgEnum(
   'price_component_type',
-  options(PriceComponentType.options),
+  PriceComponentType.options as Tuple<PriceComponentType>,
 );
-export const priceCadence = pgEnum('price_cadence', options(PriceCadence.options));
+export const priceCadence = pgEnum('price_cadence', PriceCadence.options as Tuple<PriceCadence>);
 
 export const adapterSupportState = pgEnum('adapter_support_state', [
   'reference',

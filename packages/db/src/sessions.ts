@@ -28,6 +28,30 @@ export function newSearchId(): string {
   return randomBytes(32).toString('base64url');
 }
 
+/** Builds the session policy from validated server environment values. */
+export function sessionPolicyFromEnv(env: {
+  readonly ADDRESS_HMAC_SECRET: string;
+  readonly ADDRESS_HMAC_KEY_VERSION: number;
+  readonly RAW_ADDRESS_ENCRYPTION_KEY: string;
+  readonly RAW_ADDRESS_KEY_VERSION: number;
+  readonly RAW_ADDRESS_TTL_MINUTES: number;
+  readonly SEARCH_TTL_MINUTES: number;
+  readonly SEARCH_DEADLINE_SECONDS: number;
+  readonly CONSENT_VERSION: string;
+}): SessionPolicy {
+  return {
+    hmacKey: { version: env.ADDRESS_HMAC_KEY_VERSION, secret: env.ADDRESS_HMAC_SECRET },
+    rawAddressKey: {
+      version: env.RAW_ADDRESS_KEY_VERSION,
+      secretHex: env.RAW_ADDRESS_ENCRYPTION_KEY,
+    },
+    rawAddressTtlMinutes: env.RAW_ADDRESS_TTL_MINUTES,
+    searchTtlMinutes: env.SEARCH_TTL_MINUTES,
+    deadlineSeconds: env.SEARCH_DEADLINE_SECONDS,
+    consentVersion: env.CONSENT_VERSION,
+  };
+}
+
 export interface SessionPolicy {
   readonly hmacKey: AddressIdentityKey;
   readonly rawAddressKey: RawAddressKey;

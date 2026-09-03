@@ -80,6 +80,13 @@ export type WebServerEnv = z.infer<typeof WebServerEnvSchema>;
 export const WorkerEnvSchema = SharedServerSchema.extend({
   WORKER_HEALTH_PORT: port.default(3100),
   WORKER_CONCURRENCY: z.coerce.number().int().min(1).max(64).default(4),
+  /** Per-provider concurrency ceiling inside one worker (PLA-367). */
+  PROVIDER_CONCURRENCY: z.coerce.number().int().min(1).max(16).default(2),
+  /**
+   * Comma-separated provider ids allowed to run adapters; `*` = every registered adapter.
+   * Removing an id downgrades that provider to link-only (provider-disable runbook).
+   */
+  ENABLED_PROVIDER_IDS: z.string().default('*'),
   JOB_QUEUE_SCHEMA: z
     .string()
     .regex(/^[a-z_][a-z0-9_]{0,62}$/, 'JOB_QUEUE_SCHEMA must be a lowercase postgres identifier')

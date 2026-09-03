@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "sourceType": "synthetic",
+    "capturedAt": "2026-09-03T00:00:00.000Z",
+    "adapterVersion": "1.0.0",
+    "parserVersion": "1.0.0",
+    "sanitation": "Hand-written synthetic outcome. Rate limited on the first attempt, then succeeds on retry.",
+    "fingerprint": "sha256:57890afac137ea9df09f2406f8ffbdc90c2365f4427f43d1d21f8e912d0d7fa8"
+  },
+  "body": {
+    "outcome": "rate_limited",
+    "diagnostics": {
+      "scenario": "rate-limited",
+      "succeeds_from_attempt": 2
+    }
+  }
+}
