@@ -1,15 +1,38 @@
 {
   "files": [],
   "references": [
-    { "path": "packages/domain" },
-    { "path": "packages/config" },
-    { "path": "packages/observability" },
-    { "path": "packages/db" },
-    { "path": "packages/discovery" },
-    { "path": "packages/providers" },
-    { "path": "packages/ui" },
-    { "path": "apps/worker" },
-    { "path": "apps/web" },
-    { "path": "tooling" }
+    {
+      "path": "packages/domain"
+    },
+    {
+      "path": "packages/config"
+    },
+    {
+      "path": "packages/observability"
+    },
+    {
+      "path": "packages/db"
+    },
+    {
+      "path": "packages/discovery"
+    },
+    {
+      "path": "packages/resolver"
+    },
+    {
+      "path": "packages/providers"
+    },
+    {
+      "path": "packages/ui"
+    },
+    {
+      "path": "apps/worker"
+    },
+    {
+      "path": "apps/web"
+    },
+    {
+      "path": "tooling"
+    }
   ]
 }

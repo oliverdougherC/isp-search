@@ -60,6 +60,15 @@ const SharedServerSchema = z.object({
   SEARCH_DEADLINE_SECONDS: z.coerce.number().int().min(5).max(300).default(40),
   /** Version of the consent copy shown before an address is submitted. */
   CONSENT_VERSION: z.string().min(1).max(64).default('dev-2026-09'),
+  /**
+   * Which AddressResolver runs (ADR-002). `synthetic` is the deterministic development
+   * default; `smarty` stays gated until PLA-349 provides a consented corpus and the
+   * maintainer provisions credentials/terms.
+   */
+  ADDRESS_RESOLVER: z.enum(['synthetic', 'smarty']).default('synthetic'),
+  SMARTY_ENABLED: booleanFromString.default(false),
+  SMARTY_AUTH_ID: z.string().min(1).optional(),
+  SMARTY_AUTH_TOKEN: z.string().min(1).optional(),
 });
 
 export const WebServerEnvSchema = SharedServerSchema.extend({
@@ -92,4 +101,5 @@ export const SECRET_ENV_NAMES: readonly string[] = [
   'DATABASE_URL',
   'ADDRESS_HMAC_SECRET',
   'RAW_ADDRESS_ENCRYPTION_KEY',
+  'SMARTY_AUTH_TOKEN',
 ];
