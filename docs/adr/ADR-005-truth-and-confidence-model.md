@@ -65,6 +65,13 @@ checked 2026-09-02). Tests: `packages/domain/src/availability.test.ts`,
 ## Consequences
 
 - M2 domain work (PLA-360) extends but must not weaken these enums and mappings.
+- Implemented by PLA-360 (2026-09-03): `deriveProviderAvailability` in
+  `packages/domain/src/truth.ts` composes the two mappings into the single runtime derivation —
+  explicit provider outcomes verify; every other outcome falls back to candidate evidence, capped
+  at `reported_available`/`likely_available`; no evidence yields `unknown`. Provider-job
+  transitions and `computeSearchPhase` (partial/complete are orchestration facts) live in
+  `packages/domain/src/search-state.ts`. The non-negotiable invariants are pinned by
+  `packages/domain/src/truth.test.ts`.
 - UI copy in `packages/ui` is derived from the state vocabulary (`AVAILABILITY_COPY`) and is
   never color-only.
 - Any future source that claims negative evidence must document its contract before
