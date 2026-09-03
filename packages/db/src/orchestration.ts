@@ -15,6 +15,7 @@ import {
 import { and, eq, inArray, lte } from 'drizzle-orm';
 
 import { openAddressMaterial } from './address-material.js';
+import { copyEvidenceRecord, findReusableQualification } from './caches.js';
 import { withTransaction, type Database, type DatabaseHandle } from './client.js';
 import type { JobQueue, QualificationJobData } from './queue/index.js';
 import { deleteRawAddressIfAllSettled, deleteRawAddress, newSweepRunId } from './retention.js';
@@ -186,6 +187,54 @@ export async function startQualification(
           })
           .onConflictDoNothing();
         continue;
+      }
+      // Exact-address qualification cache (PLA-369): a fresh observation for the SAME
+      // versioned identity, provider, and adapter version settles the job instantly with the
+      // original observation time — no provider traffic, no confidence upgrade.
+      if (search.addressIdentity !== null && search.addressIdentityVersion !== null) {
+        const reusable = await findReusableQualification(tx, {
+          addressIdentity: search.addressIdentity,
+          addressIdentityVersion: search.addressIdentityVersion,
+          providerId: candidate.providerId,
+          adapterVersion,
+          now,
+        });
+        if (reusable) {
+          const [cachedJob] = await tx
+            .insert(qualificationJobs)
+            .values({
+              searchId,
+              providerId: candidate.providerId,
+              adapterVersion,
+              state: 'succeeded',
+              outcome: 'available',
+              lastDiagnosticCode: 'qualification_cache_reuse',
+              settledAt: now,
+              updatedAt: now,
+            })
+            .onConflictDoNothing()
+            .returning({ id: qualificationJobs.id });
+          if (cachedJob) {
+            const evidenceId = reusable.evidenceId
+              ? await copyEvidenceRecord(tx, reusable.evidenceId)
+              : null;
+            for (const offer of reusable.offers) {
+              await persistOffer(tx, {
+                searchId,
+                providerId: candidate.providerId,
+                jobId: cachedJob.id,
+                adapterVersion,
+                offer,
+                evidenceId,
+                addressIdentity: search.addressIdentity,
+                addressIdentityVersion: search.addressIdentityVersion,
+                retrievedAt: reusable.retrievedAt,
+                expiresAt: reusable.expiresAt,
+              });
+            }
+          }
+          continue;
+        }
       }
       const [job] = await tx
         .insert(qualificationJobs)
@@ -399,6 +448,66 @@ function provenanceFromEvidence(
   };
 }
 
+/** Persists one offer with its denormalized components/conditions; idempotent per offer key. */
+async function persistOffer(
+  tx: Database,
+  input: {
+    readonly searchId: string;
+    readonly providerId: string;
+    readonly jobId: string;
+    readonly adapterVersion: string;
+    readonly offer: AddressOffer;
+    readonly evidenceId: string | null;
+    readonly addressIdentity: string;
+    readonly addressIdentityVersion: number;
+    readonly retrievedAt: Date;
+    readonly expiresAt: Date;
+  },
+): Promise<void> {
+  const [offerRow] = await tx
+    .insert(addressOffers)
+    .values({
+      searchId: input.searchId,
+      providerId: input.providerId,
+      jobId: input.jobId,
+      adapterVersion: input.adapterVersion,
+      offerKey: input.offer.offerKey,
+      offer: input.offer,
+      evidenceId: input.evidenceId,
+      addressIdentity: input.addressIdentity,
+      addressIdentityVersion: input.addressIdentityVersion,
+      retrievedAt: input.retrievedAt,
+      expiresAt: input.expiresAt,
+    })
+    .onConflictDoNothing()
+    .returning({ id: addressOffers.id });
+  if (!offerRow) return;
+  for (const [position, component] of input.offer.priceComponents.entries()) {
+    await tx.insert(offerPriceComponents).values({
+      offerId: offerRow.id,
+      position,
+      componentType: component.type,
+      label: component.label,
+      amountKind: component.amount.kind,
+      amountCents: component.amount.kind === 'known' ? component.amount.amountCents : null,
+      unknownReason: component.amount.kind === 'unknown' ? component.amount.reason : null,
+      cadence: component.cadence,
+      appliesFromMonth: component.appliesFromMonth,
+      appliesThroughMonth: component.appliesThroughMonth,
+      requiredConditions: [...component.requiredConditions],
+      included: component.included,
+    });
+  }
+  for (const [position, condition] of input.offer.conditions.entries()) {
+    await tx.insert(offerConditions).values({
+      offerId: offerRow.id,
+      position,
+      conditionType: condition.type,
+      description: condition.description,
+    });
+  }
+}
+
 /**
  * Records the attempt and either settles the job, schedules a bounded transient retry, or
  * discards a late result (finished past the global deadline). Offer persistence is idempotent
@@ -519,49 +628,18 @@ export async function settleQualificationJob(
     if (result.outcome === 'available' && result.offers && search.addressIdentity) {
       const offerTtlMs = (deps.offerTtlDays ?? 7) * 24 * 3600 * 1000;
       for (const offer of result.offers) {
-        const [offerRow] = await tx
-          .insert(addressOffers)
-          .values({
-            searchId: data.searchId,
-            providerId: data.providerId,
-            jobId,
-            adapterVersion: data.adapterVersion,
-            offerKey: offer.offerKey,
-            offer: offer,
-            evidenceId,
-            addressIdentity: search.addressIdentity,
-            addressIdentityVersion: search.addressIdentityVersion ?? 1,
-            retrievedAt: finishedAt,
-            expiresAt: new Date(finishedAt.getTime() + offerTtlMs),
-          })
-          .onConflictDoNothing()
-          .returning({ id: addressOffers.id });
-        if (offerRow) {
-          for (const [position, component] of offer.priceComponents.entries()) {
-            await tx.insert(offerPriceComponents).values({
-              offerId: offerRow.id,
-              position,
-              componentType: component.type,
-              label: component.label,
-              amountKind: component.amount.kind,
-              amountCents: component.amount.kind === 'known' ? component.amount.amountCents : null,
-              unknownReason: component.amount.kind === 'unknown' ? component.amount.reason : null,
-              cadence: component.cadence,
-              appliesFromMonth: component.appliesFromMonth,
-              appliesThroughMonth: component.appliesThroughMonth,
-              requiredConditions: [...component.requiredConditions],
-              included: component.included,
-            });
-          }
-          for (const [position, condition] of offer.conditions.entries()) {
-            await tx.insert(offerConditions).values({
-              offerId: offerRow.id,
-              position,
-              conditionType: condition.type,
-              description: condition.description,
-            });
-          }
-        }
+        await persistOffer(tx, {
+          searchId: data.searchId,
+          providerId: data.providerId,
+          jobId,
+          adapterVersion: data.adapterVersion,
+          offer,
+          evidenceId,
+          addressIdentity: search.addressIdentity,
+          addressIdentityVersion: search.addressIdentityVersion ?? 1,
+          retrievedAt: finishedAt,
+          expiresAt: new Date(finishedAt.getTime() + offerTtlMs),
+        });
       }
     }
 
