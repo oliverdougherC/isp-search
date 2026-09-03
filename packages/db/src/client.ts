@@ -29,6 +29,11 @@ export function createDatabase(options: CreateDatabaseOptions): DatabaseHandle {
     connectionTimeoutMillis: 5_000,
     idleTimeoutMillis: 30_000,
   });
+  // Idle-client failures (a restarting/stopped database) must degrade queries, not crash the
+  // process with an unhandled 'error' event; readiness reports the outage instead.
+  pool.on('error', () => {
+    // deliberately quiet: pg surfaces the same failure on the next query, where callers log it
+  });
   const db = drizzle(pool, { schema, casing: 'snake_case' });
   return {
     db,

@@ -4,23 +4,35 @@ Address-level US internet provider discovery and price comparison with explicit 
 privacy-safe search. This repository is the **engineering foundation** for a public beta. It is
 public from the first commit so that every decision, test, and privacy control is reviewable.
 
-> **Status: foundation (M1).** There is no live address search, no real provider integration,
-> and no nationwide coverage claim. What exists is listed below; nothing else should be assumed.
+> **Status: search core (M2).** The complete deterministic search pipeline runs locally —
+> address submission, unit/ambiguity workflows, registry-based candidate discovery, parallel
+> qualification jobs, progressive polling, normalized reference offers with provenance, and
+> enforced retention. **There is still no live provider integration, no live resolver call, and
+> no nationwide coverage claim**: every provider is a deterministic synthetic reference adapter,
+> and the active launch registry is a development-only synthetic market. What exists is listed
+> below; nothing else should be assumed.
 
 ## What exists today
 
-| Area                                                                                                                      | State                                                                             |
-| ------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| Domain vocabulary (availability states, adapter outcomes, search states, address contract)                                | Implemented and tested in `packages/domain`                                       |
-| Versioned keyed-HMAC address identity for future cache keys                                                               | Implemented and tested (`@isp-search/domain/address-identity`)                    |
-| Typed environment schemas with fail-fast startup validation                                                               | Implemented in `packages/config`                                                  |
-| Structured PII-safe logging, redaction, opaque correlation IDs, safe errors                                               | Implemented and canary-tested in `packages/observability`                         |
-| PostgreSQL schema, explicit Drizzle migrations, health and readiness checks, seed                                         | Implemented in `packages/db`                                                      |
-| PostgreSQL-backed job queue (pg-boss): transactional enqueue, idempotency, bounded retries, dead-letter, crash redelivery | Implemented and proven by integration tests in `packages/db`; decision in ADR-006 |
-| Provider adapter contract, registry with kill switch, deterministic reference adapters                                    | Implemented in `packages/providers`; **no live provider adapters**                |
-| Next.js web shell with `/api/health` and `/api/ready`                                                                     | Implemented in `apps/web`                                                         |
-| Long-running worker with health/readiness HTTP surface and graceful shutdown                                              | Implemented in `apps/worker`                                                      |
-| Network-disabled deterministic tests, fixture PII/secret scanner, client-bundle canary scan, import-boundary tests        | Implemented in `tooling/`                                                         |
+| Area                                                                                                                                                | State                                                                                                                               |
+| --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Domain vocabulary (availability states, adapter outcomes, search states, address contract)                                                          | Implemented and tested in `packages/domain`                                                                                         |
+| Versioned keyed-HMAC address identity for future cache keys                                                                                         | Implemented and tested (`@isp-search/domain/address-identity`)                                                                      |
+| Typed environment schemas with fail-fast startup validation                                                                                         | Implemented in `packages/config`                                                                                                    |
+| Structured PII-safe logging, redaction, opaque correlation IDs, safe errors                                                                         | Implemented and canary-tested in `packages/observability`                                                                           |
+| PostgreSQL schema, explicit Drizzle migrations, health and readiness checks, seed                                                                   | Implemented in `packages/db`                                                                                                        |
+| PostgreSQL-backed job queue (pg-boss): transactional enqueue, idempotency, bounded retries, dead-letter, crash redelivery                           | Implemented and proven by integration tests in `packages/db`; decision in ADR-006                                                   |
+| Provider adapter contract, registry with kill switch, deterministic reference adapters (13 scenarios incl. offer matrix)                            | Implemented in `packages/providers`; **no live provider adapters**; reference tier disabled in production unless explicitly allowed |
+| Privacy-safe search sessions: opaque 256-bit ids, versioned HMAC identity, AES-256-GCM raw-address material, retention sweeps with count-only audit | Implemented in `packages/db` (PLA-362)                                                                                              |
+| Registry-based candidate discovery (ADR-003 Route C) with versioned registry documents; proposed markets stay `proposed`                            | `packages/discovery` + registry import in `packages/db`                                                                             |
+| AddressResolver contract with the deterministic synthetic resolver; Smarty adapter gated off until a consented corpus exists                        | `packages/resolver` (ADR-002)                                                                                                       |
+| Qualification orchestration: transactional fan-out, per-outcome retries, global deadline, late-result discard, failure isolation                    | `packages/db` + `apps/worker` (ADR-006, PLA-367)                                                                                    |
+| Versioned polling search API (`POST /api/searches`, `GET /api/searches/:id`, actions, internal delete) with rate/body limits                        | `apps/web` + contract in `packages/domain` (PLA-368)                                                                                |
+| Layered caches: catalog observations vs identity-keyed qualification reuse; preserved disagreements                                                 | `packages/db` (PLA-369)                                                                                                             |
+| Minimal search UI: consent, ambiguity/unit flows, progressive results, offers, provenance, completeness statement                                   | `apps/web` (PLA-370)                                                                                                                |
+| Next.js web app with `/api/health` and `/api/ready`                                                                                                 | Implemented in `apps/web`                                                                                                           |
+| Long-running worker: qualification processing, deadline enforcement, retention schedule, graceful shutdown                                          | Implemented in `apps/worker`                                                                                                        |
+| Network-disabled deterministic tests, fixture PII/secret scanner, client-bundle canary scan, import-boundary tests                                  | Implemented in `tooling/`                                                                                                           |
 
 Planning, milestones, and issues live in the Linear project
 [ISP Search](https://linear.app/platinum-labs/project/isp-search-f03fc61c15a2). Architecture

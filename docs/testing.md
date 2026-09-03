@@ -1,14 +1,14 @@
 # Test layers
 
-| Layer                       | Where                                                                                             | Network                                  | Database                         | Runs in                                |
-| --------------------------- | ------------------------------------------------------------------------------------------------- | ---------------------------------------- | -------------------------------- | -------------------------------------- |
-| Unit and contract           | `*.test.ts` in every package                                                                      | blocked (`tooling/vitest/no-network.ts`) | none                             | `pnpm test`, CI `checks`               |
-| Boundary and scanner checks | `tooling/**/*.test.ts`                                                                            | blocked                                  | none                             | `pnpm test`, CI `checks`               |
-| Integration                 | `packages/db/src/**/*.integration.test.ts`                                                        | loopback only                            | PostgreSQL (`DATABASE_URL_TEST`) | `pnpm test:integration`, CI `database` |
-| Build-output scans          | `tooling/bundle-scan`, `tooling/fixture-scan`                                                     | none                                     | none                             | CI `checks`                            |
-| Browser/product E2E         | not yet (M4)                                                                                      | loopback                                 | PostgreSQL                       | —                                      |
-| Adapter fixture contracts   | `packages/providers` reference fixtures today; real fixtures in M3                                | blocked                                  | none                             | `pnpm test`                            |
-| Live canaries               | not yet (M3); require explicit secrets and `ISP_SEARCH_TEST_NETWORK=true`; never on untrusted PRs | allowed                                  | —                                | manual / protected workflow            |
+| Layer                       | Where                                                                                              | Network                                  | Database                         | Runs in                                |
+| --------------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------- | -------------------------------- | -------------------------------------- |
+| Unit and contract           | `*.test.ts` in every package                                                                       | blocked (`tooling/vitest/no-network.ts`) | none                             | `pnpm test`, CI `checks`               |
+| Boundary and scanner checks | `tooling/**/*.test.ts`                                                                             | blocked                                  | none                             | `pnpm test`, CI `checks`               |
+| Integration                 | `*.integration.test.ts` in `packages/db`, `apps/worker` (orchestration), `apps/web` (API contract) | loopback only                            | PostgreSQL (`DATABASE_URL_TEST`) | `pnpm test:integration`, CI `database` |
+| Build-output scans          | `tooling/bundle-scan`, `tooling/fixture-scan`                                                      | none                                     | none                             | CI `checks`                            |
+| Browser/product E2E         | manual/scripted against the local stack (M2 handoff transcript); automated Playwright suite in M4  | loopback                                 | PostgreSQL                       | fresh-clone gate (PLA-371)             |
+| Adapter fixture contracts   | `packages/providers` reference fixtures today; real fixtures in M3                                 | blocked                                  | none                             | `pnpm test`                            |
+| Live canaries               | not yet (M3); require explicit secrets and `ISP_SEARCH_TEST_NETWORK=true`; never on untrusted PRs  | allowed                                  | —                                | manual / protected workflow            |
 
 ## Determinism rules
 
