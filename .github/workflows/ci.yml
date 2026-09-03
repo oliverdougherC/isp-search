@@ -72,6 +72,9 @@ jobs:
       # secretlint-disable-next-line
       DATABASE_URL_TEST: postgresql://isp_search:isp_search_ci@localhost:55432/isp_search
       ADDRESS_HMAC_SECRET: ci-only-hmac-secret-not-a-real-secret-0123456789
+      # CI-only AES key for the encrypted address-material tests (not a real secret).
+      # secretlint-disable-next-line
+      RAW_ADDRESS_ENCRYPTION_KEY: c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6

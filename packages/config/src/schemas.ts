@@ -44,6 +44,22 @@ const SharedServerSchema = z.object({
   /** Debug payload capture is off by default and can never exceed a 24 hour TTL. */
   DEBUG_CAPTURE_ENABLED: booleanFromString.default(false),
   DEBUG_CAPTURE_TTL_HOURS: z.coerce.number().int().min(1).max(24).default(1),
+  /**
+   * AES-256-GCM key for the short-lived encrypted raw-address material (ADR-007, PLA-362).
+   * Exactly 64 hex characters (32 bytes). Generate with `openssl rand -hex 32` or `pnpm env:init`.
+   */
+  RAW_ADDRESS_ENCRYPTION_KEY: z
+    .string()
+    .regex(/^[0-9a-f]{64}$/, 'RAW_ADDRESS_ENCRYPTION_KEY must be 64 lowercase hex characters'),
+  RAW_ADDRESS_KEY_VERSION: z.coerce.number().int().min(1).default(1),
+  /** Raw-address retention ceiling; ADR-007 hard maximum is 24 h (1440 minutes). */
+  RAW_ADDRESS_TTL_MINUTES: z.coerce.number().int().min(1).max(1440).default(30),
+  /** Whole-search retention (record served, display data kept); ceiling 24 h. */
+  SEARCH_TTL_MINUTES: z.coerce.number().int().min(1).max(1440).default(60),
+  /** Global orchestration deadline per search (SLO hypothesis: 30–45 s). */
+  SEARCH_DEADLINE_SECONDS: z.coerce.number().int().min(5).max(300).default(40),
+  /** Version of the consent copy shown before an address is submitted. */
+  CONSENT_VERSION: z.string().min(1).max(64).default('dev-2026-09'),
 });
 
 export const WebServerEnvSchema = SharedServerSchema.extend({
@@ -72,4 +88,8 @@ export const TestEnvSchema = z.object({
 export type TestEnv = z.infer<typeof TestEnvSchema>;
 
 /** Names of every variable that must never appear in client bundles or logs in plaintext. */
-export const SECRET_ENV_NAMES: readonly string[] = ['DATABASE_URL', 'ADDRESS_HMAC_SECRET'];
+export const SECRET_ENV_NAMES: readonly string[] = [
+  'DATABASE_URL',
+  'ADDRESS_HMAC_SECRET',
+  'RAW_ADDRESS_ENCRYPTION_KEY',
+];
