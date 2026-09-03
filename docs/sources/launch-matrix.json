@@ -1,0 +1,193 @@
+{
+  "$schema": "./launch-matrix.schema.json",
+  "registry_version": "2026.09.0-proposed",
+  "status": "proposed_pending_maintainer_confirmation",
+  "route": "C",
+  "bdc_vintage": {
+    "data_as_of": "2025-12-31",
+    "download_page_last_updated": "2026-08-18",
+    "attribution": "Source data: FCC Broadband Data Collection"
+  },
+  "last_reviewed": "2026-09-02",
+  "completeness_statement_ref": "docs/adr/ADR-001-launch-boundary-and-completeness-claim.md",
+  "markets": [
+    {
+      "id": "cbsa-42660",
+      "name": "Seattle-Tacoma-Bellevue, WA",
+      "kind": "cbsa",
+      "geoids": ["42660"],
+      "status": "proposed",
+      "providers": [
+        {
+          "provider_id": "ziply-fiber",
+          "display_name": "Ziply Fiber",
+          "technologies": ["fiber", "dsl"],
+          "evidence": [
+            {
+              "type": "official_footprint",
+              "url": "https://ziplyfiber.com/new-fiber-locations",
+              "checked": "2026-09-02"
+            }
+          ],
+          "adapter_tier": "link_only",
+          "fallback_url": "https://ziplyfiber.com/",
+          "last_reviewed": "2026-09-02"
+        },
+        {
+          "provider_id": "gfiber-webpass",
+          "display_name": "GFiber Webpass",
+          "technologies": ["fixed_wireless"],
+          "evidence": [
+            {
+              "type": "official_footprint",
+              "url": "https://gfiber.com/webpass/cities/seattle/",
+              "checked": "2026-09-02"
+            }
+          ],
+          "adapter_tier": "link_only",
+          "fallback_url": "https://gfiber.com/webpass/signup/",
+          "last_reviewed": "2026-09-02"
+        },
+        {
+          "provider_id": "t-mobile-home-internet",
+          "display_name": "T-Mobile Home Internet",
+          "technologies": ["fixed_wireless"],
+          "capacity_based_eligibility": true,
+          "evidence": [
+            {
+              "type": "official_footprint",
+              "url": "https://www.t-mobile.com/home-internet",
+              "checked": "2026-09-02",
+              "note": "nationwide where capacity permits; eligibility is per address and changes over time"
+            }
+          ],
+          "adapter_tier": "link_only",
+          "fallback_url": "https://www.t-mobile.com/home-internet/eligibility",
+          "last_reviewed": "2026-09-02"
+        },
+        {
+          "provider_id": "xfinity",
+          "display_name": "Xfinity",
+          "technologies": ["cable"],
+          "evidence": [
+            {
+              "type": "unverified",
+              "note": "official footprint pages returned 403 on 2026-09-02; add BDC area summary evidence before listing"
+            }
+          ],
+          "adapter_tier": "link_only",
+          "fallback_url": "https://www.xfinity.com/learn/internet-service",
+          "last_reviewed": "2026-09-02",
+          "listing_blocked_until_evidence": true
+        },
+        {
+          "provider_id": "quantum-fiber",
+          "display_name": "Quantum Fiber",
+          "technologies": ["fiber"],
+          "evidence": [
+            {
+              "type": "unverified",
+              "note": "sold-state list not verifiable on official pages on 2026-09-02; add BDC area summary evidence before listing"
+            }
+          ],
+          "adapter_tier": "link_only",
+          "fallback_url": "https://www.quantumfiber.com/shop",
+          "last_reviewed": "2026-09-02",
+          "listing_blocked_until_evidence": true
+        }
+      ]
+    },
+    {
+      "id": "cbsa-39580",
+      "name": "Raleigh-Cary, NC",
+      "kind": "cbsa",
+      "geoids": ["39580"],
+      "status": "proposed",
+      "providers": [
+        {
+          "provider_id": "gfiber",
+          "display_name": "GFiber",
+          "technologies": ["fiber"],
+          "evidence": [
+            {
+              "type": "official_footprint",
+              "url": "https://gfiber.com/",
+              "checked": "2026-09-02",
+              "note": "North Carolina listed; metro status shown on interactive map only"
+            }
+          ],
+          "adapter_tier": "link_only",
+          "fallback_url": "https://gfiber.com/",
+          "last_reviewed": "2026-09-02"
+        },
+        {
+          "provider_id": "brightspeed",
+          "display_name": "Brightspeed",
+          "technologies": ["fiber", "dsl"],
+          "evidence": [
+            {
+              "type": "official_footprint",
+              "url": "https://www.brightspeed.com/local/",
+              "checked": "2026-09-02"
+            }
+          ],
+          "adapter_tier": "link_only",
+          "fallback_url": "https://shop.brightspeed.com/uas/",
+          "last_reviewed": "2026-09-02"
+        },
+        {
+          "provider_id": "spectrum",
+          "display_name": "Spectrum",
+          "technologies": ["cable", "fiber"],
+          "evidence": [
+            {
+              "type": "official_footprint",
+              "url": "https://corporate.charter.com/charter-cox-transaction",
+              "checked": "2026-09-02",
+              "note": "45-state combined footprint statement; market-level evidence via BDC area summary required"
+            }
+          ],
+          "adapter_tier": "link_only",
+          "fallback_url": "https://www.spectrum.com/address/localization",
+          "last_reviewed": "2026-09-02"
+        },
+        {
+          "provider_id": "att",
+          "display_name": "AT&T Fiber / Internet Air",
+          "technologies": ["fiber", "fixed_wireless"],
+          "evidence": [
+            {
+              "type": "unverified",
+              "note": "fiber state list unverified on official pages; add BDC area summary evidence before listing"
+            }
+          ],
+          "adapter_tier": "link_only",
+          "fallback_url": "https://www.att.com/internet/availability/",
+          "last_reviewed": "2026-09-02",
+          "listing_blocked_until_evidence": true
+        },
+        {
+          "provider_id": "t-mobile-home-internet",
+          "display_name": "T-Mobile Home Internet",
+          "technologies": ["fixed_wireless"],
+          "capacity_based_eligibility": true,
+          "evidence": [
+            {
+              "type": "official_footprint",
+              "url": "https://www.t-mobile.com/home-internet",
+              "checked": "2026-09-02"
+            }
+          ],
+          "adapter_tier": "link_only",
+          "fallback_url": "https://www.t-mobile.com/home-internet/eligibility",
+          "last_reviewed": "2026-09-02"
+        }
+      ]
+    }
+  ],
+  "unsupported_market_behavior": {
+    "search_state": "unsupported_market",
+    "fcc_map_link": "https://broadbandmap.fcc.gov/",
+    "never_pass_address_in_url": true
+  }
+}
