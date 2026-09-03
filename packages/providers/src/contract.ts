@@ -28,6 +28,11 @@ export const QualificationRequest = z
     address: StructuredAddress,
     /** Absolute deadline. Adapters must return `timeout` rather than run past it. */
     deadlineAt: z.iso.datetime(),
+    /**
+     * The user's answer to a previous `unit_required`/`address_ambiguous` action from THIS
+     * provider (PLA-364). Never copied across providers.
+     */
+    actionResponse: z.string().min(1).max(80).optional(),
   })
   .strict();
 export type QualificationRequest = z.infer<typeof QualificationRequest>;

@@ -1,0 +1,1 @@
+ALTER TABLE "qualification_jobs" ADD COLUMN "action_response" text;

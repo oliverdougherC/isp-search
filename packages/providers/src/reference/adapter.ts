@@ -59,6 +59,24 @@ function qualifySync(
     return { outcome, evidence: null, diagnostics: { code: load.error.reason } };
   }
   const { metadata, body } = load.fixture;
+  // Resume flow (PLA-364): once the user answered this provider's unit/building question,
+  // the deterministic scenario completes successfully.
+  if (
+    (body.outcome === 'unit_required' || body.outcome === 'address_ambiguous') &&
+    request.actionResponse !== undefined
+  ) {
+    return {
+      outcome: 'available',
+      evidence: {
+        sourceType: 'synthetic',
+        capturedAt: metadata.capturedAt,
+        adapterVersion: REFERENCE_ADAPTER_VERSION,
+        parserVersion: metadata.parserVersion,
+        fingerprint: metadata.fingerprint,
+      },
+      diagnostics: { code: 'resumed_after_action' },
+    };
+  }
   return {
     outcome: body.outcome,
     evidence: {

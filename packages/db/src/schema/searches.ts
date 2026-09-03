@@ -176,6 +176,8 @@ export const qualificationJobs = pgTable(
     outcome: adapterOutcome('outcome'),
     /** Provider action options while `action_required` (safe labels from the adapter). */
     actionOptions: jsonb('action_options').$type<readonly string[]>(),
+    /** The user's answer to this provider's action; never copied to other providers. */
+    actionResponse: text('action_response'),
     attemptCount: integer('attempt_count').notNull().default(0),
     /** PII-free typed code for the latest failure, e.g. `deadline_elapsed`. */
     lastDiagnosticCode: text('last_diagnostic_code'),

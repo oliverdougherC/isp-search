@@ -155,7 +155,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['packages/discovery/**/*.ts'],
+    files: ['packages/discovery/**/*.ts', 'packages/resolver/**/*.ts'],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -172,7 +172,7 @@ export default defineConfig([
                 '@isp-search/worker*',
                 '@isp-search/providers*',
               ],
-              message: 'Discovery is pure over its registry snapshot; persistence lives in db.',
+              message: 'Discovery and resolver packages are pure; persistence lives in db.',
             },
           ],
         },

@@ -56,6 +56,7 @@
     "@types/pg": "catalog:",
     "drizzle-kit": "catalog:",
     "typescript": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "@isp-search/resolver": "workspace:*"
   }
 }

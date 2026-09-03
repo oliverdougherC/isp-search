@@ -53,4 +53,12 @@ export {
   RegistryImportError,
   type ImportRegistryOptions,
 } from './registry.js';
+export {
+  applyAddressAction,
+  SearchActionError,
+  type AddressActionDeps,
+  type AddressActionInput,
+  type AddressActionResult,
+  type SearchActionFailure,
+} from './address-actions.js';
 export * as schema from './schema/index.js';
