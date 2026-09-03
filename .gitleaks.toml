@@ -8,6 +8,7 @@ useDefault = true
 
 [allowlist]
 description = "Intentional test canaries and ignored build output"
+regexTarget = "line"
 regexes = [
   '''CANARY[-_][A-Za-z0-9_-]+''',
   '''test-secret-that-is-at-least-32-characters-long''',
