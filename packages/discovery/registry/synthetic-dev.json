@@ -1,0 +1,139 @@
+{
+  "registry_version": "dev-2026.09.0",
+  "status": "development_only",
+  "route": "C",
+  "bdc_vintage": {
+    "data_as_of": "2025-12-31",
+    "download_page_last_updated": "2026-08-18",
+    "attribution": "Source data: FCC Broadband Data Collection"
+  },
+  "last_reviewed": "2026-09-03",
+  "completeness_statement_ref": "docs/adr/ADR-001-launch-boundary-and-completeness-claim.md",
+  "markets": [
+    {
+      "id": "synthetic-zz",
+      "name": "Synthetic Market, ZZ (development only)",
+      "kind": "synthetic",
+      "geoids": ["synthetic-zz"],
+      "status": "development_only",
+      "providers": [
+        {
+          "provider_id": "reference-available",
+          "display_name": "Reference Provider (available)",
+          "technologies": ["fiber"],
+          "evidence": [{ "type": "synthetic", "note": "deterministic reference scenario" }],
+          "adapter_tier": "reference_fixture",
+          "fallback_url": "https://example.com/reference/available",
+          "last_reviewed": "2026-09-03"
+        },
+        {
+          "provider_id": "reference-unavailable",
+          "display_name": "Reference Provider (unavailable)",
+          "technologies": ["cable"],
+          "evidence": [{ "type": "synthetic", "note": "deterministic reference scenario" }],
+          "adapter_tier": "reference_fixture",
+          "fallback_url": "https://example.com/reference/unavailable",
+          "last_reviewed": "2026-09-03"
+        },
+        {
+          "provider_id": "reference-link-only",
+          "display_name": "Reference Provider (link only)",
+          "technologies": ["dsl"],
+          "evidence": [{ "type": "synthetic", "note": "candidate with no automated verification" }],
+          "adapter_tier": "link_only",
+          "fallback_url": "https://example.com/reference/link-only",
+          "last_reviewed": "2026-09-03"
+        },
+        {
+          "provider_id": "reference-ambiguous",
+          "display_name": "Reference Provider (address ambiguous)",
+          "technologies": ["fiber"],
+          "evidence": [{ "type": "synthetic", "note": "deterministic reference scenario" }],
+          "adapter_tier": "reference_fixture",
+          "fallback_url": "https://example.com/reference/ambiguous",
+          "last_reviewed": "2026-09-03"
+        },
+        {
+          "provider_id": "reference-unit-required",
+          "display_name": "Reference Provider (unit required)",
+          "technologies": ["fiber"],
+          "evidence": [{ "type": "synthetic", "note": "deterministic reference scenario" }],
+          "adapter_tier": "reference_fixture",
+          "fallback_url": "https://example.com/reference/unit-required",
+          "last_reviewed": "2026-09-03"
+        },
+        {
+          "provider_id": "reference-timeout",
+          "display_name": "Reference Provider (timeout)",
+          "technologies": ["cable"],
+          "evidence": [{ "type": "synthetic", "note": "deterministic reference scenario" }],
+          "adapter_tier": "reference_fixture",
+          "fallback_url": "https://example.com/reference/timeout",
+          "last_reviewed": "2026-09-03"
+        },
+        {
+          "provider_id": "reference-rate-limited",
+          "display_name": "Reference Provider (rate limited)",
+          "technologies": ["fixed_wireless"],
+          "capacity_based_eligibility": true,
+          "evidence": [{ "type": "synthetic", "note": "deterministic reference scenario" }],
+          "adapter_tier": "reference_fixture",
+          "fallback_url": "https://example.com/reference/rate-limited",
+          "last_reviewed": "2026-09-03"
+        },
+        {
+          "provider_id": "reference-blocked",
+          "display_name": "Reference Provider (blocked)",
+          "technologies": ["cable"],
+          "evidence": [{ "type": "synthetic", "note": "deterministic reference scenario" }],
+          "adapter_tier": "reference_fixture",
+          "fallback_url": "https://example.com/reference/blocked",
+          "last_reviewed": "2026-09-03"
+        },
+        {
+          "provider_id": "reference-malformed",
+          "display_name": "Reference Provider (malformed source)",
+          "technologies": ["dsl"],
+          "evidence": [{ "type": "synthetic", "note": "deterministic reference scenario" }],
+          "adapter_tier": "reference_fixture",
+          "fallback_url": "https://example.com/reference/malformed",
+          "last_reviewed": "2026-09-03"
+        },
+        {
+          "provider_id": "reference-slow",
+          "display_name": "Reference Provider (slow)",
+          "technologies": ["fiber"],
+          "evidence": [{ "type": "synthetic", "note": "finishes after other providers" }],
+          "adapter_tier": "reference_fixture",
+          "fallback_url": "https://example.com/reference/slow",
+          "last_reviewed": "2026-09-03"
+        },
+        {
+          "provider_id": "reference-conflicting",
+          "display_name": "Reference Provider (conflicting evidence)",
+          "technologies": ["fiber", "dsl"],
+          "evidence": [
+            { "type": "synthetic", "note": "candidate evidence disagrees with qualification" }
+          ],
+          "adapter_tier": "reference_fixture",
+          "fallback_url": "https://example.com/reference/conflicting",
+          "last_reviewed": "2026-09-03"
+        },
+        {
+          "provider_id": "reference-late",
+          "display_name": "Reference Provider (deadline late)",
+          "technologies": ["cable"],
+          "evidence": [{ "type": "synthetic", "note": "returns after the global deadline" }],
+          "adapter_tier": "reference_fixture",
+          "fallback_url": "https://example.com/reference/late",
+          "last_reviewed": "2026-09-03"
+        }
+      ]
+    }
+  ],
+  "unsupported_market_behavior": {
+    "search_state": "unsupported_market",
+    "fcc_map_link": "https://broadbandmap.fcc.gov/",
+    "never_pass_address_in_url": true
+  }
+}

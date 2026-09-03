@@ -163,6 +163,31 @@ export const providerMarkets = pgTable(
 export type ProviderMarket = typeof providerMarkets.$inferSelect;
 export type NewProviderMarket = typeof providerMarkets.$inferInsert;
 
+/**
+ * Versioned registry documents (ADR-003 Route C). The full validated `LaunchRegistry` JSON is
+ * stored per version so imports are reviewable, swappable, and auditable; at most one document
+ * is active and candidate discovery reads only that one. Registry data contains no addresses.
+ */
+export const launchRegistryDocuments = pgTable(
+  'launch_registry_documents',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    registryVersion: text('registry_version').notNull(),
+    status: text('status').notNull(),
+    document: jsonb('document').$type<Record<string, unknown>>().notNull(),
+    active: boolean('active').notNull().default(false),
+    importedAt: timestamp('imported_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('launch_registry_documents_version').on(table.registryVersion),
+    uniqueIndex('launch_registry_documents_one_active')
+      .on(table.active)
+      .where(sql`${table.active} = true`),
+  ],
+);
+
+export type LaunchRegistryDocumentRow = typeof launchRegistryDocuments.$inferSelect;
+
 /** Circuit/health state per provider (minimal in M2; scoring arrives in M3, PLA-381). */
 export const providerHealth = pgTable('provider_health', {
   providerId: text('provider_id')

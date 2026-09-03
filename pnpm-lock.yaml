@@ -236,6 +236,9 @@ importers:
       '@isp-search/config':
         specifier: workspace:*
         version: link:../config
+      '@isp-search/discovery':
+        specifier: workspace:*
+        version: link:../discovery
       '@isp-search/domain':
         specifier: workspace:*
         version: link:../domain
@@ -264,6 +267,25 @@ importers:
       drizzle-kit:
         specifier: 'catalog:'
         version: 0.31.10
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.11(@types/node@24.13.3)(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(tsx@4.23.13))
+
+  packages/discovery:
+    dependencies:
+      '@isp-search/domain':
+        specifier: workspace:*
+        version: link:../domain
+      zod:
+        specifier: 'catalog:'
+        version: 4.5.4
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.13.3
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
