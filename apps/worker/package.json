@@ -21,7 +21,7 @@
     "@isp-search/domain": "workspace:*",
     "@isp-search/observability": "workspace:*",
     "@isp-search/providers": "workspace:*",
-    "playwright": "1.62.1"
+    "playwright": "1.64.0"
   },
   "devDependencies": {
     "@types/node": "catalog:",
